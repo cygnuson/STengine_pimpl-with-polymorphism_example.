@@ -8,9 +8,15 @@ SFMLApplication::SFMLApplication(std::shared_ptr<sf::RenderWindow> target,
 	_target(target),
 	_texMan(TextureManager::GetInstance()),
 	_soundMan(SoundManager::GetInstance()),
-	_fontMan(FontManager::GetInstance())
+	_fontMan(FontManager::GetInstance()),
+	_state(initialState),
+	_view(*_state->_view)
 {
-	PushState(initialState);
+	if (!_state)
+	{
+		cg::logger::log_error("The initial state is invalid.");
+		throw std::runtime_error("The initial state is invalid.");
+	}
 }
 
 
@@ -119,7 +125,7 @@ bool SFMLApplication::InputEvent(sf::Event & ev)
 	{
 		return false;
 	}
-	TopState()->HandleInput(ev);
+	_state->HandleInput(ev);
 	return true;
 }
 
@@ -162,61 +168,12 @@ bool SFMLApplication::OnFocusGained(sf::Event & ev)
 
 bool SFMLApplication::Draw()
 {
-	auto s = TopState();
-	return s->Draw(*_target);
-}
-
-std::shared_ptr<State>& SFMLApplication::TopState()
-{
-	if (StateOk())
-	{
-		return _states.top();
-	}
-	else
-	{
-		_target->close();
-		cg::logger::log_warning("There are no states.");
-		throw std::runtime_error("There are no states.");
-	}
-}
-
-void SFMLApplication::PopState()
-{
-	/*called from StateOk() so it there should be state on the stack.*/
-	auto lastState = _states.top(); /*Keep alive if someone wants it befor its
-									destroyed.*/
-	_states.pop();
-
-}
-
-std::shared_ptr<State> SFMLApplication::PushState(std::shared_ptr<State> state)
-{
-	_states.push(state);
-	_view = &state->_view;
+	return _state->Draw(*_target);
 }
 
 bool SFMLApplication::StateOk()
 {
-	if (_states.empty())
-	{
-		cg::logger::log_error("There is no state available.");
-		return false;
-	}
-	if (_states.top()->_popMe)
-	{
-		PopState();
-		if (_states.empty())
-		{
-			cg::logger::log_warning("The last state was popped.");
-			_target->close();
-			return false;
-		}
-		else
-		{
-			return true;
-		}
-	}
-	return true;
+	return (bool) _state;
 }
 
 bool SFMLApplication::DrawOk()

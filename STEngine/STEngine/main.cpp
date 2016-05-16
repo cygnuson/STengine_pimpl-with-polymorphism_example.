@@ -13,11 +13,10 @@
 
 #include "SFMLApplication.hpp"
 
-class TestState : public State
+class TestState
 {
 public:
 	TestState()
-		:State(_view)
 	{
 		_test = sf::Sprite(TextureManager::GetInstance()["test"]);
 	}
@@ -35,6 +34,10 @@ public:
 
 		return true;
 	}
+	sf::View& GetView()
+	{
+		return _view;
+	}
 	sf::Sprite _test;
 	sf::View   _view;
 };
@@ -50,7 +53,7 @@ int main()
 	tm.MakeTexture("test", "test.jpg");
 	SFMLApplication app(std::make_shared<sf::RenderWindow>(
 		sf::VideoMode(800,600,32),"TestWindow"), 
-		std::make_shared<TestState>());
+		SFMLApplication::MakeState<TestState>());
 
 	app.Start();
 
