@@ -45,6 +45,8 @@ private:
 	std::shared_ptr<State>& TopState();
 	/**Try to pop a state.*/
 	void PopState();
+	/**Push a state to the top of the stack.*/
+	std::shared_ptr<State> PushState(std::shared_ptr<State> state);
 
 	/**The actual window of the app.*/
 	std::shared_ptr<sf::RenderWindow>  _target;
@@ -56,6 +58,8 @@ private:
 	FontManager&                       _fontMan;
 	/**The state stack*/
 	std::stack<std::shared_ptr<State>> _states;
+	/**The current view.*/
+	sf::View*                          _view;
 };
 
 #endif //SFMLAPPLICATION_HPP

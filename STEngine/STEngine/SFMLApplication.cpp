@@ -10,7 +10,7 @@ SFMLApplication::SFMLApplication(std::shared_ptr<sf::RenderWindow> target,
 	_soundMan(SoundManager::GetInstance()),
 	_fontMan(FontManager::GetInstance())
 {
-	_states.push(initialState);
+	PushState(initialState);
 }
 
 
@@ -189,6 +189,12 @@ void SFMLApplication::PopState()
 
 }
 
+std::shared_ptr<State> SFMLApplication::PushState(std::shared_ptr<State> state)
+{
+	_states.push(state);
+	_view = &state->_view;
+}
+
 bool SFMLApplication::StateOk()
 {
 	if (_states.empty())
@@ -204,6 +210,10 @@ bool SFMLApplication::StateOk()
 			cg::logger::log_warning("The last state was popped.");
 			_target->close();
 			return false;
+		}
+		else
+		{
+			return true;
 		}
 	}
 	return true;
