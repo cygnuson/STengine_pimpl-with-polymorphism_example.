@@ -30,6 +30,8 @@ public:
 	std::pair<bool, KeyType> FindExistingResource(const std::string& path);
 	/**Get a vale from this manager.*/
 	ValueType& Get(const KeyType& key);
+	/**Shortcut for Get*/
+	ValueType& operator[](const KeyType& key);
 protected:
 	/**the key, location pair.*/
 	using PathValuePair = std::pair <PathType, std::shared_ptr<ValueType>>;
@@ -46,7 +48,7 @@ protected:
 	/**There is not much to destroy here.*/
 	virtual ~ResourceManager();
 	/**Get the name of this manager.*/
-	std::string GetName();
+	virtual inline std::string GetName();
 
 	/**The data in the form of a triplet of Key,Path,Value*/
 	std::map<KeyType, PathValuePair> _data;
@@ -100,7 +102,7 @@ inline std::pair<bool, KeyType> ResourceManager<KeyType, ValueType>::
 		}
 	}
 	cg::logger::log_note(1, GetName(), "(FindExistingResource):Resource does ",
-		"not exist. ", key);
+		"not exist. ", path);
 	return std::make_pair(false,KeyType());
 }
 
@@ -120,6 +122,13 @@ inline ValueType & ResourceManager<KeyType, ValueType>::Get(
 			, key);
 		throw std::runtime_error("Resource does not exist.");
 	}
+}
+
+template<typename KeyType, typename ValueType>
+inline ValueType & ResourceManager<KeyType, ValueType>::operator[](
+	const KeyType & key)
+{
+	return Get(key);
 }
 
 template<typename KeyType, typename ValueType>
@@ -144,7 +153,7 @@ template<typename ...Args>
 inline ValueType & ResourceManager<KeyType, ValueType>::Emplace(
 	const KeyType & key, const std::string & path, Args && ...args)
 {
-	auto alternate = FindExistingResource(key, path);
+	auto alternate = FindExistingResource(path);
 	if (alternate.first)
 	{
 		cg::logger::log_error(GetName(), "(Emplace):Resource already exists.", 

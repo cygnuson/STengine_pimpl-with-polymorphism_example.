@@ -1,89 +1,10 @@
-#include "InputMatrix.hpp"
+#pragma once
 
+#include <string>
 
+#include <SFML\Graphics.hpp>
 
-InputMatrix::InputMatrix()
-{
-	ClearAll();
-}
-
-InputMatrix::~InputMatrix()
-{
-
-}
-
-InputMatrix & InputMatrix::GetInstance()
-{
-	static InputMatrix im;
-	return im;
-}
-bool InputMatrix::ProcessEvent(sf::Event & ev)
-{
-	if (ev.type == sf::Event::KeyPressed
-		&& ev.key.code != sf::Keyboard::Unknown
-		&& !_keys[ev.key.code])
-	{
-		cg::logger::log_note(2, "Pressed key: ", GetKeyName(ev.key.code));
-		_keys[ev.key.code] = true;
-	}
-	else if (ev.type == sf::Event::KeyReleased
-		&& ev.key.code != sf::Keyboard::Unknown
-		&& _keys[ev.key.code])
-	{
-		cg::logger::log_note(2, "Released key: ", GetKeyName(ev.key.code));
-		_keys[ev.key.code] = false;
-	}
-	else if (ev.type == sf::Event::MouseButtonPressed
-		&& !_buttons[ev.mouseButton.button])
-	{
-		cg::logger::log_note(2, "Pressed button: ",
-			GetKeyName(ev.mouseButton.button), " @ [y,x] : [", 
-			ev.mouseButton.y,",",ev.mouseButton.x,"]");
-		_buttons[ev.mouseButton.button] = true;
-	}
-	else if (ev.type == sf::Event::MouseButtonReleased
-		&& _buttons[ev.mouseButton.button])
-	{
-		cg::logger::log_note(2, "Released button: ",
-			GetKeyName(ev.mouseButton.button), " @ [y,x] : [",
-			ev.mouseButton.y, ",", ev.mouseButton.x, "]");
-		_buttons[ev.mouseButton.button] = false;
-	}
-	else if (ev.type == sf::Event::MouseMoved) {
-		_mousePosition.second = ev.mouseMove.x;
-		_mousePosition.first = ev.mouseMove.y;
-		cg::logger::log_note(1, "Mouse moved to [y,x]: [",
-			_mousePosition.first, ",", _mousePosition.second, "]");
-	}
-	else if (ev.type == sf::Event::MouseWheelScrolled) {
-		cg::logger::log_note(2, "Mouse wheel scrolled: ",
-			ev.mouseWheelScroll.delta);
-		_mouseWheel = ev.mouseWheelScroll.delta;
-	}
-	else
-	{
-		return false;
-	}
-	return true;
-}
-
-bool InputMatrix::operator[](sf::Keyboard::Key key)
-{
-	return _keys[key];
-}
-
-bool InputMatrix::operator[](sf::Mouse::Button button)
-{
-	return _buttons[button];
-}
-
-void InputMatrix::ClearAll()
-{
-	cg::logger::log_note(2, "InputMatrix (ClearAll): Keys all cleared.");
-	_keys.fill(false);
-	_buttons.fill(false);
-}
-std::string InputMatrix::GetKeyName(sf::Mouse::Button b)
+inline std::string GetKeyName(sf::Mouse::Button b)
 {
 	switch (b) {
 	case sf::Mouse::Button::Left:
@@ -102,7 +23,7 @@ std::string InputMatrix::GetKeyName(sf::Mouse::Button b)
 }
 
 //This helper function is from BlackHC at the forum.  I have modified it.
-std::string InputMatrix::GetKeyName(sf::Keyboard::Key key)
+inline std::string GetKeyName(sf::Keyboard::Key key)
 {
 	switch (key) {
 	default:

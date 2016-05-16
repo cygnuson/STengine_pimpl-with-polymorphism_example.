@@ -19,6 +19,11 @@ public:
 		static FontManager tm;
 		return tm;
 	}
+	/**Get the name of this manager.*/
+	virtual inline std::string GetName()
+	{
+		return "Font Manager";
+	}
 };
 
 #endif // FONTMANAGER_HPP

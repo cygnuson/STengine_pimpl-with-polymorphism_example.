@@ -2,6 +2,7 @@
 #define INPUTMATRIX_HPP
 
 #include <array>
+#include <queue>
 
 #include <SFML\Graphics.hpp>
 
@@ -13,6 +14,8 @@ public:
 	virtual ~InputMatrix();
 	/**Get the string name of a key.*/
 	std::string GetKeyName(sf::Keyboard::Key key);
+	/**Key names for Mouse buttons.*/
+	std::string GetKeyName(sf::Mouse::Button b);
 	/*This is a singleton. Get the single instance.*/
 	static InputMatrix& GetInstance();
 	/*Process events into the matrix. Retrun true if an event was consumed.*/
@@ -27,7 +30,7 @@ public:
 	std::array<bool, sf::Keyboard::KeyCount> _keys;
 	std::array<bool, sf::Mouse::ButtonCount> _buttons;
 	std::pair<int, int>                      _mousePosition = { 0,0 };
-	int                                      _mouseWheel = 0;
+	float                                    _mouseWheel = 0;
 private:
 	/*private constructor. this is a singleton.*/
 	InputMatrix();

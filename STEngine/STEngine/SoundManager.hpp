@@ -19,6 +19,11 @@ public:
 		static SoundManager tm;
 		return tm;
 	}
+	/**Get the name of this manager.*/
+	virtual inline std::string GetName()
+	{
+		return "Sound Manager";
+	}
 };
 
 #endif //SOUNDMANAGER_HPP
