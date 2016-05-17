@@ -27,6 +27,7 @@ SFMLApplication::~SFMLApplication()
 
 void SFMLApplication::Start()
 {
+	float dt = 0;
 	while (_target->isOpen())
 	{
 		sf::Event ev;
@@ -37,7 +38,7 @@ void SFMLApplication::Start()
 				/*system input was handled by the function, no need to keep going.*/
 				continue;
 			}
-			else if (InputEvent(ev))
+			else if (InputEvent(ev,dt))
 			{
 				/*Input was consumed so we continue here.*/
 				continue;
@@ -50,7 +51,7 @@ void SFMLApplication::Start()
 		if (DrawOk())
 		{
 			_target->clear();
-			Draw();
+			Draw(dt);
 			_target->display();
 		}
 		else
@@ -89,7 +90,7 @@ bool SFMLApplication::WindowEvent(sf::Event& ev)
 	}
 }
 
-bool SFMLApplication::InputEvent(sf::Event & ev)
+bool SFMLApplication::InputEvent(sf::Event & ev,float dt)
 {
 	if (ev.type == sf::Event::KeyPressed
 		&& ev.key.code != sf::Keyboard::Unknown)
@@ -126,7 +127,7 @@ bool SFMLApplication::InputEvent(sf::Event & ev)
 		return false;
 	}
 	StateOk();
-	HandleStatePair(_stack.top()->HandleInput(ev));
+	HandleStatePair(_stack.top()->HandleInput(ev,dt));
 	return true;
 }
 
@@ -174,9 +175,9 @@ bool SFMLApplication::OnFocusGained(sf::Event & ev)
 	return false;
 }
 
-bool SFMLApplication::Draw()
+bool SFMLApplication::Draw(float dt)
 {
-	_stack.top()->Draw(*_target);
+	_stack.top()->Draw(*_target,dt);
 	return true; 
 }
 

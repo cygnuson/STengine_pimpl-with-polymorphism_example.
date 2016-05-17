@@ -39,7 +39,7 @@ private:
 	\return true if the event was consumed.
 	*/
 	bool WindowEvent(sf::Event& ev);
-	bool InputEvent(sf::Event& ev);
+	bool InputEvent(sf::Event& ev, float dt);
 	bool OnResize(sf::Event& ev);
 	bool OnClose(sf::Event& ev);
 	void Close();
@@ -48,7 +48,7 @@ private:
 	bool OnFocusLost(sf::Event& ev);
 	bool OnFocusGained(sf::Event& ev);
 	/**Do system draws and then call the top of the stack.*/
-	bool Draw();
+	bool Draw(float dt);
 
 	/**The actual window of the app.*/
 	std::shared_ptr<sf::RenderWindow>   _target;

@@ -15,14 +15,14 @@ State::~State()
 
 }
 
-bool State::Draw(sf::RenderWindow & win)
+bool State::Draw(sf::RenderWindow & win, float dt)
 {
-	return _self->Draw(win);
+	return _self->Draw(win,dt);
 }
 
-State::StatePair State::HandleInput(sf::Event & ev)
+State::StatePair State::HandleInput(sf::Event & ev, float dt)
 {
-	return _self->HandleInput(ev);
+	return _self->HandleInput(ev,dt);
 }
 sf::View & State::GetView()
 {
@@ -30,5 +30,10 @@ sf::View & State::GetView()
 }
 bool State::SanityCheck()
 {
-	return (bool)_self;
+	return (bool)_self && _self->SanityCheck();
+}
+
+bool State::UpdateLogic(float dt)
+{
+	return _self->UpdateLogic(dt);
 }

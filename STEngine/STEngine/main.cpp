@@ -24,12 +24,19 @@ public:
 	{
 
 	}
-	bool Draw(sf::RenderWindow& win)
+	bool Draw(sf::RenderWindow& win, float dt)
 	{
 		win.draw(_test);
 		return true;
 	}
-	State::StatePair HandleInput(sf::Event& ev)
+	bool SanityCheck() {
+		return true;
+	}
+	bool UpdateLogic(float dt)
+	{
+		return true;
+	}
+	State::StatePair HandleInput(sf::Event& ev, float dt)
 	{
 
 		return std::make_pair(State::Flag::None, nullptr);;
