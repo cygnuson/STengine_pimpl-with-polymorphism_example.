@@ -9,14 +9,14 @@ SFMLApplication::SFMLApplication(std::shared_ptr<sf::RenderWindow> target,
 	_texMan(TextureManager::GetInstance()),
 	_soundMan(SoundManager::GetInstance()),
 	_fontMan(FontManager::GetInstance()),
-	_state(initialState),
-	_view(*_state->_view)
+	_view(initialState->GetView())
 {
-	if (!_state)
+	if (!initialState)
 	{
 		cg::logger::log_error("The initial state is invalid.");
 		throw std::runtime_error("The initial state is invalid.");
 	}
+	_stack.push(initialState);
 }
 
 
@@ -125,7 +125,8 @@ bool SFMLApplication::InputEvent(sf::Event & ev)
 	{
 		return false;
 	}
-	_state->HandleInput(ev);
+	StateOk();
+	HandleStatePair(_stack.top()->HandleInput(ev));
 	return true;
 }
 
@@ -137,11 +138,18 @@ bool SFMLApplication::OnResize(sf::Event & ev)
 
 bool SFMLApplication::OnClose(sf::Event & ev)
 {
-	_target->close();
-	cg::logger::log_note(1, "Window was closed.");
+	Close();
 	return false;
 }
-
+void SFMLApplication::Close()
+{
+	while (_stack.size() > 1)
+	{
+		_stack.pop();
+	}
+	_target->close();
+	cg::logger::log_note(1, "Window was closed.");
+}
 bool SFMLApplication::OnMouseEnter(sf::Event & ev)
 {
 	cg::logger::log_note(1, "The mouse enetered the window.");
@@ -168,12 +176,18 @@ bool SFMLApplication::OnFocusGained(sf::Event & ev)
 
 bool SFMLApplication::Draw()
 {
-	return _state->Draw(*_target);
+	_stack.top()->Draw(*_target);
+	return true; 
 }
 
 bool SFMLApplication::StateOk()
 {
-	return (bool) _state;
+	if (_stack.empty())
+	{
+		cg::logger::log_error("The states stack is empty.");
+		return false;
+	}
+	return (bool) _stack.top();
 }
 
 bool SFMLApplication::DrawOk()
@@ -182,4 +196,42 @@ bool SFMLApplication::DrawOk()
 	bool b = StateOk();
 	return a
 		&& b;
+}
+
+void SFMLApplication::HandleStatePair(State::StatePair& pair)
+{
+	switch (pair.first)
+	{
+	case State::Flag::Exit:
+		cg::logger::log_note(3, "Got the exit signal from the state.");
+		Close();
+		break;
+	case State::Flag::Pop:
+		cg::logger::log_note(3, "Got the POP signal from the state.");
+		PopState();
+		break;
+	case State::Flag::Push:
+		cg::logger::log_note(3, "Got the PUSH signal from the state.");
+		PushState(pair.second);
+		break;
+	default: //will include the None flag.
+
+		break;
+	}
+}
+
+void SFMLApplication::PushState(std::shared_ptr<State> state)
+{
+	_stack.push(state);
+	StateOk();
+}
+
+void SFMLApplication::PopState()
+{
+	if (_stack.size() == 1)
+	{
+		cg::logger::log_error("Trying to pop the last state.");
+	}
+	_stack.pop();
+	StateOk();
 }

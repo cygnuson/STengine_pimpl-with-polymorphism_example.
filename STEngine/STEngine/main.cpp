@@ -29,10 +29,10 @@ public:
 		win.draw(_test);
 		return true;
 	}
-	bool HandleInput(sf::Event& ev)
+	State::StatePair HandleInput(sf::Event& ev)
 	{
 
-		return true;
+		return std::make_pair(State::Flag::None, nullptr);;
 	}
 	sf::View& GetView()
 	{
@@ -51,9 +51,10 @@ int main()
 	SoundManager& sm = SoundManager::GetInstance();
 
 	tm.MakeTexture("test", "test.jpg");
+	tm.MakeTexture("test2", "test2.jpg");
 	SFMLApplication app(std::make_shared<sf::RenderWindow>(
 		sf::VideoMode(800,600,32),"TestWindow"), 
-		SFMLApplication::MakeState<TestState>());
+		State::MakeState<TestState>());
 
 	app.Start();
 

@@ -122,6 +122,7 @@
     <ClInclude Include="KeyName.hpp" />
     <ClInclude Include="logger.hpp" />
     <ClInclude Include="ResourceManager.hpp" />
+    <ClInclude Include="SFINAE.hpp" />
     <ClInclude Include="SFMLApplication.hpp" />
     <ClInclude Include="SoundManager.hpp" />
     <ClInclude Include="State.hpp" />
@@ -133,6 +134,7 @@
     <ClCompile Include="logger.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="SFMLApplication.cpp" />
+    <ClCompile Include="State.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

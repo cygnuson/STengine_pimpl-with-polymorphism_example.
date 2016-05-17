@@ -60,7 +60,7 @@ inline void ResourceManager<KeyType, ValueType>::Pop(const KeyType & key)
 {
 	if (Exists(key))
 	{
-		cg::logger::log_note(2,GetName(), 
+		cg::logger::log_note(2, GetName(),
 			"(Pop):Popping the value indexed with ", key, ".");
 		_data.erase(key);
 	}
@@ -78,7 +78,7 @@ inline bool ResourceManager<KeyType, ValueType>::Exists(const KeyType & key)
 	bool exists = (_data.count(key) > 0);
 	if (exists)
 	{
-		cg::logger::log_note(1, GetName(), "(Exists):Resource does exist. ", 
+		cg::logger::log_note(1, GetName(), "(Exists):Resource does exist. ",
 			key);
 	}
 	else {
@@ -90,7 +90,7 @@ inline bool ResourceManager<KeyType, ValueType>::Exists(const KeyType & key)
 
 template<typename KeyType, typename ValueType>
 inline std::pair<bool, KeyType> ResourceManager<KeyType, ValueType>::
-	FindExistingResource(const std::string & path)
+FindExistingResource(const std::string & path)
 {
 	for (const auto& e : _data)
 	{
@@ -98,12 +98,12 @@ inline std::pair<bool, KeyType> ResourceManager<KeyType, ValueType>::
 		{
 			cg::logger::log_error(GetName(), "(FindExistingResource):Resource",
 				" exists under different key (", e.first, ")");
-			return std::make_pair(true,e.first);
+			return std::make_pair(true, e.first);
 		}
 	}
 	cg::logger::log_note(1, GetName(), "(FindExistingResource):Resource does ",
 		"not exist. ", path);
-	return std::make_pair(false,KeyType());
+	return std::make_pair(false, KeyType());
 }
 
 template<typename KeyType, typename ValueType>
@@ -153,20 +153,26 @@ template<typename ...Args>
 inline ValueType & ResourceManager<KeyType, ValueType>::Emplace(
 	const KeyType & key, const std::string & path, Args && ...args)
 {
+	if (Exists(key))
+	{
+		cg::logger::log_error(GetName(), "(Emplace): A resource with that key",
+			" exists already.", key);
+		throw std::runtime_error("A key with that name already exists.");
+	}
 	auto alternate = FindExistingResource(path);
 	if (alternate.first)
 	{
-		cg::logger::log_error(GetName(), "(Emplace):Resource already exists.", 
+		cg::logger::log_error(GetName(), "(Emplace):Resource already exists.",
 			key, " @ ", path);
 		_data[key].second = _data[alternate.second].second;
 		return *_data[key].second;
 	}
 	else
 	{
-		cg::logger::log_note(3,GetName(), "(Emplace):Adding resource. ", key, 
+		cg::logger::log_note(3, GetName(), "(Emplace):Adding resource. ", key,
 			" @ ", path);
 		_data[key].first = path;
-		_data[key].second = 
+		_data[key].second =
 			std::make_shared<ValueType>(std::forward<Args>(args)...);
 		return *_data[key].second;
 	}
