@@ -127,7 +127,7 @@ bool SFMLApplication::InputEvent(sf::Event & ev,float dt)
 		return false;
 	}
 	StateOk();
-	HandleStatePair(_stack.top()->HandleInput(ev,dt));
+	HandleEventFlag(_stack.top()->HandleInput(ev,dt));
 	return true;
 }
 
@@ -199,9 +199,9 @@ bool SFMLApplication::DrawOk()
 		&& b;
 }
 
-void SFMLApplication::HandleStatePair(State::StatePair& pair)
+void SFMLApplication::HandleEventFlag(State::Flag flag)
 {
-	switch (pair.first)
+	switch (flag)
 	{
 	case State::Flag::Exit:
 		cg::logger::log_note(3, "Got the exit signal from the state.");
@@ -213,7 +213,8 @@ void SFMLApplication::HandleStatePair(State::StatePair& pair)
 		break;
 	case State::Flag::Push:
 		cg::logger::log_note(3, "Got the PUSH signal from the state.");
-		PushState(pair.second);
+		StateOk();
+		PushState(_stack.top()->GetState());
 		break;
 	default: //will include the None flag.
 
@@ -232,6 +233,7 @@ void SFMLApplication::PopState()
 	if (_stack.size() == 1)
 	{
 		cg::logger::log_error("Trying to pop the last state.");
+		return;
 	}
 	_stack.pop();
 	StateOk();

@@ -20,7 +20,7 @@ bool State::Draw(sf::RenderWindow & win, float dt)
 	return _self->Draw(win,dt);
 }
 
-State::StatePair State::HandleInput(sf::Event & ev, float dt)
+State::Flag State::HandleInput(sf::Event & ev, float dt)
 {
 	return _self->HandleInput(ev,dt);
 }
@@ -36,4 +36,9 @@ bool State::SanityCheck()
 bool State::UpdateLogic(float dt)
 {
 	return _self->UpdateLogic(dt);
+}
+
+std::shared_ptr<State> State::GetState()
+{
+	return _self->GetState();
 }

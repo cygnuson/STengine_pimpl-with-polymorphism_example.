@@ -16,9 +16,9 @@
 class TestState
 {
 public:
-	TestState()
+	TestState(const std::string& tex)
 	{
-		_test = sf::Sprite(TextureManager::GetInstance()["test"]);
+		_test = sf::Sprite(TextureManager::GetInstance()[tex]);
 	}
 	virtual ~TestState()
 	{
@@ -36,17 +36,30 @@ public:
 	{
 		return true;
 	}
-	State::StatePair HandleInput(sf::Event& ev, float dt)
+	State::Flag HandleInput(sf::Event& ev, float dt)
 	{
-
-		return std::make_pair(State::Flag::None, nullptr);;
+		if (ev.type == sf::Event::MouseButtonReleased)
+		{
+			_stateInQuestion = State::MakeState<TestState>("test2");
+			return State::Flag::Push;
+		}
+		if (ev.type == sf::Event::KeyReleased)
+		{
+			return State::Flag::Pop;
+		}
+		return State::Flag::None;
+	}
+	std::shared_ptr<State> GetState()
+	{
+		return _stateInQuestion;
 	}
 	sf::View& GetView()
 	{
 		return _view;
 	}
-	sf::Sprite _test;
-	sf::View   _view;
+	sf::Sprite             _test;
+	sf::View               _view;
+	std::shared_ptr<State> _stateInQuestion;
 };
 
 int main()
@@ -61,7 +74,7 @@ int main()
 	tm.MakeTexture("test2", "test2.jpg");
 	SFMLApplication app(std::make_shared<sf::RenderWindow>(
 		sf::VideoMode(800,600,32),"TestWindow"), 
-		State::MakeState<TestState>());
+		State::MakeState<TestState>("test"));
 
 	app.Start();
 

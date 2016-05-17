@@ -26,7 +26,7 @@ private:
 	/**Determine if the system is in a state that is drawable.*/
 	bool DrawOk();
 	/**Determine what to do with the stack pair that the state returned.*/
-	void HandleStatePair(State::StatePair& pair);
+	void HandleEventFlag(State::Flag pair);
 	/**Pop a state of fthe stack. All current input will bedumped to the 
 	current states que.*/
 	void PushState(std::shared_ptr<State> state);
