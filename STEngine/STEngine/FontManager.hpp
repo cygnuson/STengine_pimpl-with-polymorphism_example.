@@ -14,13 +14,13 @@ private:
 	FontManager() {};
 public:
 	virtual ~FontManager() {};
-	static inline FontManager& GetInstance()
+	static inline FontManager& GetInstance() noexcept
 	{
 		static FontManager tm;
 		return tm;
 	}
 	/**Get the name of this manager.*/
-	virtual inline std::string GetName()
+	virtual inline std::string GetName() const noexcept
 	{
 		return "Font Manager";
 	}

@@ -24,22 +24,23 @@ public:
 	/**Pop an object that matches the key off the map.*/
 	void Pop(const KeyType& key);
 	/**Check if somthing exists with this Key.*/
-	bool Exists(const KeyType& key);
+	bool Exists(const KeyType& key) const noexcept;
 	/**Check if something exists with this path.
 	\return An std::pair with first= exists or not, second = the key that
 	already owns that resource.*/
-	std::pair<bool, KeyType> FindExistingResource(const std::string& path);
+	std::pair<bool, KeyType> 
+		FindExistingResource(const std::string& path)const noexcept;
 	/**Get a vale from this manager.*/
 	ValueType& Get(const KeyType& key);
 	/**Shortcut for Get*/
 	ValueType& operator[](const KeyType& key);
 protected:
-	/**Test if a file path exists or not.*/
-	bool FileExists(const std::string& path);
 	/**the key, location pair.*/
 	using PathValuePair = std::pair <PathType, std::shared_ptr<ValueType>>;
+	/**Test if a file path exists or not.*/
+	bool FileExists(const std::string& path)const;
 	/**Hide the default constructor*/
-	ResourceManager();
+	ResourceManager() noexcept;
 	/**Deleted this constructor*/
 	ResourceManager(const ResourceManager& other) = delete;
 	/**Deleted this constructor*/
@@ -49,9 +50,9 @@ protected:
 	/**Deleted this operator=*/
 	void operator=(ResourceManager&& other) = delete;
 	/**There is not much to destroy here.*/
-	virtual ~ResourceManager();
+	virtual ~ResourceManager() noexcept;
 	/**Get the name of this manager.*/
-	virtual inline std::string GetName();
+	virtual inline std::string GetName() const noexcept;
 
 	/**The data in the form of a triplet of Key,Path,Value*/
 	std::map<KeyType, PathValuePair> _data;
@@ -76,7 +77,8 @@ inline void ResourceManager<KeyType, ValueType>::Pop(const KeyType & key)
 }
 
 template<typename KeyType, typename ValueType>
-inline bool ResourceManager<KeyType, ValueType>::Exists(const KeyType & key)
+inline bool ResourceManager<KeyType, ValueType>::
+Exists(const KeyType & key) const noexcept
 {
 	bool exists = (_data.count(key) > 0);
 	if (exists)
@@ -85,15 +87,15 @@ inline bool ResourceManager<KeyType, ValueType>::Exists(const KeyType & key)
 			key,"`");
 	}
 	else {
-		cg::logger::log_note(1, GetName(), "(Exists):Resource does not exist. `"
-			, key, "`");
+		cg::logger::log_note(1, GetName(), "(Exists):Resource does not "
+			"exist. `", key, "`");
 	}
 	return exists;
 }
 
 template<typename KeyType, typename ValueType>
 inline std::pair<bool, KeyType> ResourceManager<KeyType, ValueType>::
-FindExistingResource(const std::string & path)
+FindExistingResource(const std::string & path) const noexcept
 {
 	for (const auto& e : _data)
 	{
@@ -136,7 +138,7 @@ inline ValueType & ResourceManager<KeyType, ValueType>::operator[](
 
 template<typename KeyType, typename ValueType>
 inline bool ResourceManager<KeyType, ValueType>::FileExists(
-	const std::string & path)
+	const std::string & path) const
 {
 	std::ifstream check(path);
 	bool exists = (bool) check;
@@ -155,19 +157,20 @@ inline bool ResourceManager<KeyType, ValueType>::FileExists(
 }
 
 template<typename KeyType, typename ValueType>
-inline ResourceManager<KeyType, ValueType>::ResourceManager()
+inline ResourceManager<KeyType, ValueType>::ResourceManager() noexcept
 {
 	cg::logger::log_note(3, "A manager was created.");
 }
 
 template<typename KeyType, typename ValueType>
-inline ResourceManager<KeyType, ValueType>::~ResourceManager()
+inline ResourceManager<KeyType, ValueType>::~ResourceManager() noexcept
 {
 	cg::logger::log_note(3, "A manager was destroyed.");
 }
 
 template<typename KeyType, typename ValueType>
-inline std::string ResourceManager<KeyType, ValueType>::GetName()
+inline std::string ResourceManager<KeyType, ValueType>::
+GetName() const noexcept
 {
 	return "ResourceManager (BASE)";
 }

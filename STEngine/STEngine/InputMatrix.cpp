@@ -2,12 +2,12 @@
 
 
 
-InputMatrix::InputMatrix()
+InputMatrix::InputMatrix() noexcept
 {
 	ClearAll();
 }
 
-InputMatrix::~InputMatrix()
+InputMatrix::~InputMatrix() noexcept
 {
 
 }
@@ -20,6 +20,10 @@ bool InputMatrix::IsPressed(sf::Keyboard::Key key, bool unpress)
 	}
 	return retValue;
 }
+bool InputMatrix::IsPressed(sf::Keyboard::Key key) const
+{
+	return _keys[key];
+}
 bool InputMatrix::IsPressed(sf::Mouse::Button button, bool unpress)
 {
 	bool retValue = _buttons[button];
@@ -27,6 +31,10 @@ bool InputMatrix::IsPressed(sf::Mouse::Button button, bool unpress)
 		SetReleased(button);
 	}
 	return retValue;
+}
+bool InputMatrix::IsPressed(sf::Mouse::Button button) const
+{
+	return _buttons[button];
 }
 void InputMatrix::SetPressed(sf::Keyboard::Key key)
 {
@@ -50,7 +58,7 @@ bool InputMatrix::IgnoreBadInput(bool ignore)
 	return _ignoreBadInput = ignore;
 }
 
-std::string InputMatrix::GetEventName(const sf::Event::EventType& ev)
+std::string InputMatrix::GetEventName(const sf::Event::EventType& ev) noexcept
 {
 	switch (ev)
 	{
@@ -190,7 +198,7 @@ void InputMatrix::ClearAll()
 	_keys.fill(false);
 	_buttons.fill(false);
 }
-std::string InputMatrix::GetKeyName(sf::Mouse::Button b)
+std::string InputMatrix::GetKeyName(sf::Mouse::Button b)noexcept
 {
 	switch (b) {
 	case sf::Mouse::Button::Left:
@@ -209,7 +217,7 @@ std::string InputMatrix::GetKeyName(sf::Mouse::Button b)
 }
 
 //This helper function is from BlackHC at the forum.  I have modified it.
-std::string InputMatrix::GetKeyName(sf::Keyboard::Key key)
+std::string InputMatrix::GetKeyName(sf::Keyboard::Key key) noexcept
 {
 	switch (key) {
 	default:

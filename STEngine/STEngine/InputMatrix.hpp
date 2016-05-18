@@ -17,31 +17,33 @@ the non-input events to be ignored, use IgnoreBadInput(true);
 class InputMatrix
 {
 public:
-	InputMatrix();
-	virtual ~InputMatrix();
+	InputMatrix() noexcept;
+	virtual ~InputMatrix() noexcept;
 	/**Get the string name of a key.*/
-	std::string GetKeyName(sf::Keyboard::Key key);
+	static std::string GetKeyName(sf::Keyboard::Key key)noexcept;
 	/**Key names for Mouse buttons.*/
-	std::string GetKeyName(sf::Mouse::Button b);
+	static std::string GetKeyName(sf::Mouse::Button b)noexcept;
 	/*This is a singleton. Get the single instance.*/
 	bool ProcessEvent(sf::Event& ev);
 	/*Clear all key states and mosue states.*/
 	void ClearAll();
 	/*return true if the key is down. Unpress = true will force release the 
 	key.*/
-	bool IsPressed(sf::Keyboard::Key key, bool unpress = false);
+	bool IsPressed(sf::Keyboard::Key key, bool unpress);
+	bool IsPressed(sf::Keyboard::Key key) const;
 	/*Set a key as beign pressed.*/
 	void SetPressed(sf::Keyboard::Key key);
 	/*Set a key as being released.*/
 	void SetReleased(sf::Keyboard::Key key);
 	/**mouse overloads.*/
-	bool IsPressed(sf::Mouse::Button button, bool unpress = false);
+	bool IsPressed(sf::Mouse::Button button, bool unpress);
+	bool IsPressed(sf::Mouse::Button button) const;
 	void SetPressed(sf::Mouse::Button button);
 	void SetReleased(sf::Mouse::Button button);
 	/**Start or stop ignoring bad input.*/
 	bool IgnoreBadInput(bool ignore);
 	/**Get events name for logging.*/
-	std::string GetEventName(const sf::Event::EventType& ev);
+	static std::string GetEventName(const sf::Event::EventType& ev) noexcept;
 	/**start collecting text instead of collecting key presses.  The text is
 	piped to ofs.*/
 	void CollectText(std::ostream& ofs);
