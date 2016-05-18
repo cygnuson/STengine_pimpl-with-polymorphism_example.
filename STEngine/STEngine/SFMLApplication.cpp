@@ -5,18 +5,49 @@
 SFMLApplication::SFMLApplication(std::shared_ptr<sf::RenderWindow> target,
 	std::shared_ptr<State> initialState)
 	:
-	_target(target),
-	_texMan(TextureManager::GetInstance()),
+	_target   (target),
+	_texMan  (TextureManager::GetInstance()),
 	_soundMan(SoundManager::GetInstance()),
-	_fontMan(FontManager::GetInstance()),
-	_view(initialState->GetView())
+	_fontMan (FontManager::GetInstance())
 {
 	if (!initialState)
 	{
 		cg::logger::log_error("The initial state is invalid.");
 		throw std::runtime_error("The initial state is invalid.");
 	}
-	_stack.push(initialState);
+	PushState(initialState);
+}
+
+SFMLApplication::SFMLApplication(const SFMLApplication::Config & config)
+try
+	:
+	_texMan  (TextureManager::GetInstance()),
+	_soundMan(SoundManager::GetInstance()),
+	_fontMan (FontManager::GetInstance())
+{
+	_contextSettings = sf::ContextSettings(
+		config._depthBufferBits,
+		config._stencilBufferBits,
+		config._antiAliasing,
+		config._majorVersion,
+		config._minorVersion,
+		config._attributes);
+	_target = std::make_shared<sf::RenderWindow>(
+		sf::VideoMode(
+			config._width,
+			config._height,
+			config._bitPerPixel),
+		config._title,
+		config._style,
+		_contextSettings);
+	_target->setKeyRepeatEnabled(config._keyRepeat);
+	PushState(config._initialState);
+}
+catch (const std::exception& e) /*Catch an exception the may throw with the
+								initial state not being set.*/
+{
+	cg::logger::log_error("An exception was thrown. Its likly that the ",
+		"initial state was not set in the supplied config file. E:", e.what());
 }
 
 
@@ -27,18 +58,16 @@ SFMLApplication::~SFMLApplication()
 
 void SFMLApplication::Start()
 {
-	float dt = 0;
+	if (!SanityCheck())
+	{
+		cg::logger::log_error("Sanity check failed.");
+	}
 	while (_target->isOpen())
 	{
 		sf::Event ev;
 		while (_target->pollEvent(ev))
 		{
-			if (WindowEvent(ev))
-			{
-				/*system input was handled by the function, no need to keep going.*/
-				continue;
-			}
-			else if (InputEvent(ev,dt))
+			if (InputEvent(ev))
 			{
 				/*Input was consumed so we continue here.*/
 				continue;
@@ -48,10 +77,11 @@ void SFMLApplication::Start()
 				/*Other eevnt handling.*/
 			}
 		}
+		UpdateLogic();
 		if (DrawOk())
 		{
 			_target->clear();
-			Draw(dt);
+			Draw();
 			_target->display();
 		}
 		else
@@ -61,36 +91,12 @@ void SFMLApplication::Start()
 
 	}
 }
-bool SFMLApplication::WindowEvent(sf::Event& ev)
+bool SFMLApplication::SanityCheck()
 {
-	switch (ev.type)
-	{
-	case sf::Event::Closed:
-		OnClose(ev);
-		return true;
-	case sf::Event::Resized:
-		OnResize(ev);
-		return true;
-	case sf::Event::LostFocus:
-		OnFocusLost(ev);
-		return true;
-	case sf::Event::GainedFocus:
-		OnFocusGained(ev);
-		return true;
-	case sf::Event::MouseEntered:
-		OnMouseEnter(ev);
-		return true;
-	case sf::Event::MouseLeft:
-		OnMouseLeave(ev);
-		return true;
-	default:
-		cg::logger::log_note(1, "A non-system event has been skipped by the",
-			"system HandleInput.");
-		return false;
-	}
+	return StateOk() && DrawOk();
 }
 
-bool SFMLApplication::InputEvent(sf::Event & ev,float dt)
+bool SFMLApplication::InputEvent(sf::Event & ev)
 {
 	if (ev.type == sf::Event::KeyPressed
 		&& ev.key.code != sf::Keyboard::Unknown)
@@ -122,63 +128,43 @@ bool SFMLApplication::InputEvent(sf::Event & ev,float dt)
 		cg::logger::log_note(2, "Mouse wheel scrolled: ",
 			ev.mouseWheelScroll.delta);
 	}
+	else if (ev.type == sf::Event::JoystickButtonPressed)
+	{
+
+	}
+	else if (ev.type == sf::Event::JoystickButtonReleased)
+	{
+
+	}
+	else if (ev.type == sf::Event::TouchBegan)
+	{
+
+	}
+	else if (ev.type == sf::Event::TouchEnded)
+	{
+
+	}
+	else if (ev.type == sf::Event::TouchMoved)
+	{
+
+	}
+
+	else if (ev.type == sf::Event::SensorChanged)
+	{
+
+	}
 	else
 	{
-		return false;
+		/**other event.*/
 	}
 	StateOk();
-	HandleEventFlag(_stack.top()->HandleInput(ev,dt));
+	HandleEventFlag(_stack.top()->HandleInput(ev));
 	return true;
 }
-
-bool SFMLApplication::OnResize(sf::Event & ev)
+bool SFMLApplication::Draw()
 {
-	cg::logger::log_note(1, "Window was resized.");
-	return false;
-}
-
-bool SFMLApplication::OnClose(sf::Event & ev)
-{
-	Close();
-	return false;
-}
-void SFMLApplication::Close()
-{
-	while (_stack.size() > 1)
-	{
-		_stack.pop();
-	}
-	_target->close();
-	cg::logger::log_note(1, "Window was closed.");
-}
-bool SFMLApplication::OnMouseEnter(sf::Event & ev)
-{
-	cg::logger::log_note(1, "The mouse enetered the window.");
-	return false;
-}
-
-bool SFMLApplication::OnMouseLeave(sf::Event & ev)
-{
-	cg::logger::log_note(1, "The mouse left the window.");
-	return false;
-}
-
-bool SFMLApplication::OnFocusLost(sf::Event & ev)
-{
-	cg::logger::log_note(1, "Window lost focus.");
-	return false;
-}
-
-bool SFMLApplication::OnFocusGained(sf::Event & ev)
-{
-	cg::logger::log_note(1, "Window gained focus.");
-	return false;
-}
-
-bool SFMLApplication::Draw(float dt)
-{
-	_stack.top()->Draw(*_target,dt);
-	return true; 
+	_stack.top()->Draw(*_target);
+	return true;
 }
 
 bool SFMLApplication::StateOk()
@@ -188,12 +174,12 @@ bool SFMLApplication::StateOk()
 		cg::logger::log_error("The states stack is empty.");
 		return false;
 	}
-	return (bool) _stack.top();
+	return (bool)_stack.top();
 }
 
 bool SFMLApplication::DrawOk()
 {
-	bool a = _target->isOpen();
+	bool a = WindowOk();
 	bool b = StateOk();
 	return a
 		&& b;
@@ -205,7 +191,7 @@ void SFMLApplication::HandleEventFlag(State::Flag flag)
 	{
 	case State::Flag::Exit:
 		cg::logger::log_note(3, "Got the exit signal from the state.");
-		Close();
+		_target->close();
 		break;
 	case State::Flag::Pop:
 		cg::logger::log_note(3, "Got the POP signal from the state.");
@@ -225,7 +211,8 @@ void SFMLApplication::HandleEventFlag(State::Flag flag)
 void SFMLApplication::PushState(std::shared_ptr<State> state)
 {
 	_stack.push(state);
-	StateOk();
+	auto size = _target->getSize();
+	state->GetView().setSize((float)size.x, (float)size.y);
 }
 
 void SFMLApplication::PopState()
@@ -236,5 +223,24 @@ void SFMLApplication::PopState()
 		return;
 	}
 	_stack.pop();
-	StateOk();
+}
+
+bool SFMLApplication::WindowOk()
+{
+	if (!_target || !_target->isOpen())
+	{
+		cg::logger::log_error("The render window is not setup, but it was "
+			, "accessed.");
+		return false;
+	}
+	else 
+	{
+		return true;
+	}
+}
+
+bool SFMLApplication::UpdateLogic()
+{
+	_stack.top()->UpdateLogic();
+	return true;
 }

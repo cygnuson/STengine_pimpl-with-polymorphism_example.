@@ -24,6 +24,15 @@ public:
 	{
 		return "Font Manager";
 	}
+	/**Add a item to the manager.*/
+	virtual inline sf::Font& MakeFont(const std::string& name,
+		const std::string& path)
+	{
+		cg::logger::log_note(2, GetName(), "(MakeFont): Making the "
+			"font ", name, " from ", path);
+		Emplace(name, path).loadFromFile(path);
+		return this->Get(name);
+	}
 };
 
 #endif // FONTMANAGER_HPP

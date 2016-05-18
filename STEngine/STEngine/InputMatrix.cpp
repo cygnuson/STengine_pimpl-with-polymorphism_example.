@@ -12,69 +12,102 @@ InputMatrix::~InputMatrix()
 
 }
 
-InputMatrix & InputMatrix::GetInstance()
+bool InputMatrix::IsPressed(sf::Keyboard::Key key, bool unpress)
 {
-	static InputMatrix im;
-	return im;
+	bool retValue = _keys[key];
+	if (retValue && unpress) {
+		SetReleased(key);
+	}
+	return retValue;
 }
-bool InputMatrix::ProcessEvent(sf::Event & ev)
+bool InputMatrix::IsPressed(sf::Mouse::Button button, bool unpress)
+{
+	bool retValue = _buttons[button];
+	if (retValue && unpress) {
+		SetReleased(button);
+	}
+	return retValue;
+}
+void InputMatrix::SetPressed(sf::Keyboard::Key key)
+{
+	_keys[key] = true;
+}
+void InputMatrix::SetPressed(sf::Mouse::Button button)
+{
+	_buttons[button] = true;
+}
+void InputMatrix::SetReleased(sf::Keyboard::Key key)
+{
+	_keys[key] = false;
+}
+void InputMatrix::SetReleased(sf::Mouse::Button button)
+{
+	_buttons[button] = false;
+}
+
+bool InputMatrix::ProcessInputIntoMatrix(sf::Event & ev)
 {
 	if (ev.type == sf::Event::KeyPressed
 		&& ev.key.code != sf::Keyboard::Unknown
 		&& !_keys[ev.key.code])
 	{
-		cg::logger::log_note(2, "Pressed key: ", GetKeyName(ev.key.code));
 		_keys[ev.key.code] = true;
 	}
 	else if (ev.type == sf::Event::KeyReleased
 		&& ev.key.code != sf::Keyboard::Unknown
 		&& _keys[ev.key.code])
 	{
-		cg::logger::log_note(2, "Released key: ", GetKeyName(ev.key.code));
 		_keys[ev.key.code] = false;
 	}
 	else if (ev.type == sf::Event::MouseButtonPressed
 		&& !_buttons[ev.mouseButton.button])
 	{
-		cg::logger::log_note(2, "Pressed button: ",
-			GetKeyName(ev.mouseButton.button), " @ [y,x] : [", 
-			ev.mouseButton.y,",",ev.mouseButton.x,"]");
 		_buttons[ev.mouseButton.button] = true;
 	}
 	else if (ev.type == sf::Event::MouseButtonReleased
 		&& _buttons[ev.mouseButton.button])
 	{
-		cg::logger::log_note(2, "Released button: ",
-			GetKeyName(ev.mouseButton.button), " @ [y,x] : [",
-			ev.mouseButton.y, ",", ev.mouseButton.x, "]");
 		_buttons[ev.mouseButton.button] = false;
 	}
 	else if (ev.type == sf::Event::MouseMoved) {
 		_mousePosition.second = ev.mouseMove.x;
 		_mousePosition.first = ev.mouseMove.y;
-		cg::logger::log_note(1, "Mouse moved to [y,x]: [",
-			_mousePosition.first, ",", _mousePosition.second, "]");
 	}
 	else if (ev.type == sf::Event::MouseWheelScrolled) {
-		cg::logger::log_note(2, "Mouse wheel scrolled: ",
-			ev.mouseWheelScroll.delta);
 		_mouseWheel = ev.mouseWheelScroll.delta;
+	}
+	else if (ev.type == sf::Event::JoystickButtonPressed)
+	{
+
+	}
+	else if (ev.type == sf::Event::JoystickButtonReleased)
+	{
+
+	}
+	else if (ev.type == sf::Event::TouchBegan)
+	{
+
+	}
+	else if (ev.type == sf::Event::TouchEnded)
+	{
+
+	}
+	else if (ev.type == sf::Event::TouchMoved)
+	{
+
+	}
+
+	else if (ev.type == sf::Event::SensorChanged)
+	{
+
 	}
 	else
 	{
+		cg::logger::log_warning("A non-input event made it to the input",
+			" an matrix.");
 		return false;
 	}
 	return true;
-}
-
-bool InputMatrix::operator[](sf::Keyboard::Key key)
-{
-	return _keys[key];
-}
-
-bool InputMatrix::operator[](sf::Mouse::Button button)
-{
-	return _buttons[button];
 }
 
 void InputMatrix::ClearAll()

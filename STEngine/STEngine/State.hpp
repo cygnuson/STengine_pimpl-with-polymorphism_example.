@@ -7,6 +7,7 @@
 #include <SFML/Graphics.hpp>
 #include <SFML/System.hpp>
 
+#include "InputMatrix.hpp"
 #include "TextureManager.hpp"
 #include "SoundManager.hpp"
 #include "FontManager.hpp"
@@ -27,11 +28,11 @@
 *	`State::MakeState<SomeState>(SomeState's args)`. SomeState is not required
 *	to inherit anything. but it MUST have the following functions defined:
 *
-*	     State::StackPair Draw(sf::RenderWindow&,float)
-*	     bool HandleInput(sf::Event&,float)
+*	     State::StackPair Draw(sf::RenderWindow&, sf::Time)
+*	     bool HandleInput(sf::Event&, sf::Time)
 *	     sf::View& GetView()
 *	     bool SanityCheck()
-*	     bool UpdateLogic()
+*	     bool UpdateLogic(sf::Time)
 *	     std::shared_ptr<State> GetState()
 *
 *	This list may change, its also at the function comment for 
@@ -45,6 +46,10 @@
 *	call and one additional virtual call. This means that its best to call from
 *	inside the state as often as able.
 * 
+* F: The state implamentor is responsible for timing.  All that is supplied
+*	is the delta-time as a function arg.
+*
+*
 * 
 ******************************************************************************/
 
@@ -63,26 +68,26 @@ public:
 	/**Draw the state. Calls the _self->Draw(...)
 	\return A pair that holds a flag and a pointer to a state. the ptr to state
 	is only used when the flag requires a new state.*/
-	bool Draw(sf::RenderWindow& win, float dt);
+	bool Draw(sf::RenderWindow& win);
 	/**Handle input. Calls _self->HandleInput(...)*/
-	State::Flag HandleInput(sf::Event& ev, float dt);
+	State::Flag HandleInput(sf::Event& ev);
 	/**Get the view of this state (will get from _self)*/
 	sf::View& GetView();
 	/**Make sure the stat is sane.*/
 	bool SanityCheck();
 	/**Update the state logics.*/
-	bool UpdateLogic(float dt);
+	bool UpdateLogic();
 	/**Get the new state. This is how the app gets the new states when a state
 	needs to create another, and sends the Flag::Push as a return of 
 	handleinput().*/
 	std::shared_ptr<State> GetState();
 	/**Create a state for use with an app.
 	T must have:
-	State::StackPair Draw(sf::RenderWindow&,float)
-	bool HandleInput(sf::Event&,float)
+	State::StackPair Draw(sf::RenderWindow&,sf::time)
+	bool HandleInput(sf::Event&, sf::Time)
 	sf::View& GetView()
 	bool SanityCheck()
-	bool UpdateLogic()
+	bool UpdateLogic(sf::Time)
 	std::shared_ptr<State> GetState()
 
 	T will be initialized with Args...
@@ -96,14 +101,21 @@ protected:
 	class StateBase
 	{
 	public:
-		/**If returning somthing that does not require a state ptr, use nullptr
-		*/
-		virtual bool Draw(sf::RenderWindow& win, float dt) = 0;
-		virtual State::Flag HandleInput(sf::Event& ev, float dt) = 0;
+		virtual bool Draw(sf::RenderWindow& win) = 0;
+		virtual State::Flag HandleInput(sf::Event& ev) = 0;
 		virtual sf::View& GetView() = 0;
-		virtual bool UpdateLogic(float dt) = 0;
+		virtual bool UpdateLogic() = 0;
 		virtual bool SanityCheck() = 0;
 		virtual std::shared_ptr<State> GetState() = 0;
+	protected:
+		/**The logic FPS*/
+		double _logicFPS;
+		/**The texture manager*/
+		TextureManager&  _texMan = TextureManager::GetInstance();
+		/**The sound manager*/
+		SoundManager&    _soundMan = SoundManager::GetInstance();
+		/**The font manager*/
+		FontManager&     _fontMan = FontManager::GetInstance();
 	};
 
 	/**The actual impl that will inherit from the class that is created with 
@@ -114,14 +126,19 @@ protected:
 	public:
 		template<typename...Args>
 		StateImpl(Args...args);
-		virtual bool Draw(sf::RenderWindow& win, float dt);
-		virtual State::Flag HandleInput(sf::Event& ev, float dt);
+		virtual bool Draw(sf::RenderWindow& win);
+		virtual State::Flag HandleInput(sf::Event& ev);
 		virtual sf::View& GetView();
-		virtual bool UpdateLogic(float dt);
+		virtual bool UpdateLogic();
 		virtual bool SanityCheck();
 		virtual std::shared_ptr<State> GetState();
 	private:
-
+		/**The main apps drawing clock*/
+		sf::Clock                           _drawClock;
+		/**The main apps logic clock*/
+		sf::Clock                           _logicClock;
+		/**The main apps input clock*/
+		sf::Clock                           _inputClock;
 	};
 
 	friend class SFMLApplication;
@@ -154,15 +171,15 @@ inline State::StateImpl<T>::StateImpl(Args...args)
 
 }
 template<typename T>
-bool State::StateImpl<T>::Draw(sf::RenderWindow & win, float dt)
+bool State::StateImpl<T>::Draw(sf::RenderWindow & win)
 {
-	return T::Draw(win,dt);
+	return T::Draw(win,_drawClock.restart());
 }
 
 template<typename T>
-State::Flag State::StateImpl<T>::HandleInput(sf::Event & ev, float dt)
+State::Flag State::StateImpl<T>::HandleInput(sf::Event & ev)
 {
-	return T::HandleInput(ev,dt);
+	return T::HandleInput(ev, _inputClock.restart());
 }
 
 template<typename T>
@@ -172,9 +189,9 @@ sf::View & State::StateImpl<T>::GetView()
 }
 
 template<typename T>
-inline bool State::StateImpl<T>::UpdateLogic(float dt)
+inline bool State::StateImpl<T>::UpdateLogic()
 {
-	return true;
+	return T::UpdateLogic(_logicClock.restart());
 }
 
 template<typename T>
@@ -188,6 +205,5 @@ inline std::shared_ptr<State> State::StateImpl<T>::GetState()
 {
 	return T::GetState();
 }
-
 
 #endif //STATE_HPP

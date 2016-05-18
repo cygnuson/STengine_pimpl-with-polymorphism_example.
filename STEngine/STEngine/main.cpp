@@ -13,40 +13,67 @@
 
 #include "SFMLApplication.hpp"
 
-class TestState
+//TODO: file not found checking for resource manager. (make part of base.)
+
+class TestState : public InputMatrix
 {
 public:
 	TestState(const std::string& tex)
 	{
 		_test = sf::Sprite(TextureManager::GetInstance()[tex]);
+		_view.move(-300, -300);
 	}
 	virtual ~TestState()
 	{
 
 	}
-	bool Draw(sf::RenderWindow& win, float dt)
+	bool Draw(sf::RenderWindow& win, sf::Time dt)
 	{
+		win.setView(_view);
 		win.draw(_test);
+		sf::Text txt(lfDt, FontManager::GetInstance()["mech"]);;
+		txt.setCharacterSize(30);
+		txt.setColor(sf::Color::Red);
+		txt.setPosition(0, 0);
+		
+		win.draw(txt);
 		return true;
 	}
 	bool SanityCheck() {
 		return true;
 	}
-	bool UpdateLogic(float dt)
+	bool UpdateLogic(sf::Time dt)
 	{
+		if (IsPressed(sf::Keyboard::Left))
+		{
+			_test.move(100*dt.asSeconds(), 100 * dt.asSeconds());
+		}
 		return true;
 	}
-	State::Flag HandleInput(sf::Event& ev, float dt)
+	void Resize(sf::Event& ev)
 	{
+		_view.setSize(float(ev.size.width), float(ev.size.height));
+	}
+	State::Flag HandleInput(sf::Event& ev, sf::Time dt)
+	{
+		if (!ProcessInputIntoMatrix(ev))
+		{
+			/*event was not an input event.*/
+		}
+		if (ev.type == sf::Event::Closed)
+		{
+			return State::Flag::Exit;
+		}
+		if (ev.type == sf::Event::Resized)
+		{
+			Resize(ev);
+		}
 		if (ev.type == sf::Event::MouseButtonReleased)
 		{
 			_stateInQuestion = State::MakeState<TestState>("test2");
 			return State::Flag::Push;
 		}
-		if (ev.type == sf::Event::KeyReleased)
-		{
-			return State::Flag::Pop;
-		}
+
 		return State::Flag::None;
 	}
 	std::shared_ptr<State> GetState()
@@ -60,6 +87,8 @@ public:
 	sf::Sprite             _test;
 	sf::View               _view;
 	std::shared_ptr<State> _stateInQuestion;
+	uint64_t lFrames = 0;
+	std::string lfDt;
 };
 
 int main()
@@ -72,9 +101,12 @@ int main()
 
 	tm.MakeTexture("test", "test.jpg");
 	tm.MakeTexture("test2", "test2.jpg");
-	SFMLApplication app(std::make_shared<sf::RenderWindow>(
-		sf::VideoMode(800,600,32),"TestWindow"), 
-		State::MakeState<TestState>("test"));
+	fm.MakeFont("mech", "fonts/Mechanical.otf");
+	SFMLApplication::Config config;
+	config._title = "Test Title";
+	config._keyRepeat = false;
+	config._initialState = State::MakeState<TestState>("test");
+	SFMLApplication app(config);
 
 	app.Start();
 
