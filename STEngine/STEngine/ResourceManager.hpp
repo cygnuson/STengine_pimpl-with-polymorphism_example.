@@ -3,6 +3,7 @@
 
 #include <string>
 #include <map>
+#include <fstream>
 #include <utility>
 
 #include "logger.hpp"
@@ -33,6 +34,8 @@ public:
 	/**Shortcut for Get*/
 	ValueType& operator[](const KeyType& key);
 protected:
+	/**Test if a file path exists or not.*/
+	bool FileExists(const std::string& path);
 	/**the key, location pair.*/
 	using PathValuePair = std::pair <PathType, std::shared_ptr<ValueType>>;
 	/**Hide the default constructor*/
@@ -61,13 +64,13 @@ inline void ResourceManager<KeyType, ValueType>::Pop(const KeyType & key)
 	if (Exists(key))
 	{
 		cg::logger::log_note(2, GetName(),
-			"(Pop):Popping the value indexed with ", key, ".");
+			"(Pop):Popping the value indexed with `", key, "`.");
 		_data.erase(key);
 	}
 	else
 	{
-		cg::logger::log_error(GetName(), "(Pop):Resource does not exist.",
-			key);
+		cg::logger::log_error(GetName(), "(Pop):Resource does not exist. `",
+			key, "`");
 		throw std::runtime_error("Could not erase resource.");
 	}
 }
@@ -78,12 +81,12 @@ inline bool ResourceManager<KeyType, ValueType>::Exists(const KeyType & key)
 	bool exists = (_data.count(key) > 0);
 	if (exists)
 	{
-		cg::logger::log_note(1, GetName(), "(Exists):Resource does exist. ",
-			key);
+		cg::logger::log_note(1, GetName(), "(Exists):Resource does exist. `",
+			key,"`");
 	}
 	else {
-		cg::logger::log_note(1, GetName(), "(Exists):Resource does not exist. "
-			, key);
+		cg::logger::log_note(1, GetName(), "(Exists):Resource does not exist. `"
+			, key, "`");
 	}
 	return exists;
 }
@@ -102,7 +105,7 @@ FindExistingResource(const std::string & path)
 		}
 	}
 	cg::logger::log_note(1, GetName(), "(FindExistingResource):Resource does ",
-		"not exist. ", path);
+		"not exist. `", path,"`");
 	return std::make_pair(false, KeyType());
 }
 
@@ -112,14 +115,14 @@ inline ValueType & ResourceManager<KeyType, ValueType>::Get(
 {
 	if (Exists(key))
 	{
-		cg::logger::log_note(1, GetName(), "(Get):Returning resource. "
-			, key);
+		cg::logger::log_note(1, GetName(), "(Get):Returning resource. `"
+			, key, "`");
 		return *_data[key].second;
 	}
 	else
 	{
-		cg::logger::log_note(1, GetName(), "(Get):Resource does not exist. "
-			, key);
+		cg::logger::log_note(1, GetName(), "(Get):Resource does not exist. `"
+			, key, "`");
 		throw std::runtime_error("Resource does not exist.");
 	}
 }
@@ -129,6 +132,26 @@ inline ValueType & ResourceManager<KeyType, ValueType>::operator[](
 	const KeyType & key)
 {
 	return Get(key);
+}
+
+template<typename KeyType, typename ValueType>
+inline bool ResourceManager<KeyType, ValueType>::FileExists(
+	const std::string & path)
+{
+	std::ifstream check(path);
+	bool exists = (bool) check;
+	if (exists)
+	{
+		cg::logger::log_note(3, GetName(), "(FileExists):The file: `", path,
+			"` exists.");
+	}
+	else
+	{
+		cg::logger::log_error(GetName(), "(FileExists):The file: `", path,
+			"` does not exist.");
+		throw std::runtime_error("The file does not exist.");
+	}
+	return exists;
 }
 
 template<typename KeyType, typename ValueType>
@@ -156,21 +179,22 @@ inline ValueType & ResourceManager<KeyType, ValueType>::Emplace(
 	if (Exists(key))
 	{
 		cg::logger::log_error(GetName(), "(Emplace): A resource with that key",
-			" exists already.", key);
+			" exists already. `", key, "`");
 		throw std::runtime_error("A key with that name already exists.");
 	}
 	auto alternate = FindExistingResource(path);
 	if (alternate.first)
 	{
-		cg::logger::log_error(GetName(), "(Emplace):Resource already exists.",
-			key, " @ ", path);
+		cg::logger::log_error(GetName(), "(Emplace):Resource already ",
+			"exists. `",key, "` @ `", path, "`");
 		_data[key].second = _data[alternate.second].second;
 		return *_data[key].second;
 	}
 	else
 	{
-		cg::logger::log_note(3, GetName(), "(Emplace):Adding resource. ", key,
-			" @ ", path);
+		FileExists(path);
+		cg::logger::log_note(3, GetName(), "(Emplace):Adding resource. `", key,
+			"` @ `", path, "`");
 		_data[key].first = path;
 		_data[key].second =
 			std::make_shared<ValueType>(std::forward<Args>(args)...);

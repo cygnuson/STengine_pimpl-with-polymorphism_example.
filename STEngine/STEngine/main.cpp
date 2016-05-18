@@ -22,6 +22,8 @@ public:
 	{
 		_test = sf::Sprite(TextureManager::GetInstance()[tex]);
 		_view.move(-300, -300);
+		IgnoreBadInput(true);
+		InputMatrix::CollectText(_oss);
 	}
 	virtual ~TestState()
 	{
@@ -31,11 +33,17 @@ public:
 	{
 		win.setView(_view);
 		win.draw(_test);
-		sf::Text txt(lfDt, FontManager::GetInstance()["mech"]);;
+		static sf::Text txt("", FontManager::GetInstance()["mech"]);;
 		txt.setCharacterSize(30);
-		txt.setColor(sf::Color::Red);
 		txt.setPosition(0, 0);
-		
+
+		if (IsPressed(sf::Keyboard::Return,true))
+		{
+			txt = sf::Text(_oss.str(), 
+				FontManager::GetInstance()["mech"]);;
+			_oss.str(std::string());
+			//StopCollectText();
+		}
 		win.draw(txt);
 		return true;
 	}
@@ -56,10 +64,6 @@ public:
 	}
 	State::Flag HandleInput(sf::Event& ev, sf::Time dt)
 	{
-		if (!ProcessInputIntoMatrix(ev))
-		{
-			/*event was not an input event.*/
-		}
 		if (ev.type == sf::Event::Closed)
 		{
 			return State::Flag::Exit;
@@ -67,6 +71,7 @@ public:
 		if (ev.type == sf::Event::Resized)
 		{
 			Resize(ev);
+			return State::Flag::None;
 		}
 		if (ev.type == sf::Event::MouseButtonReleased)
 		{
@@ -74,6 +79,7 @@ public:
 			return State::Flag::Push;
 		}
 
+		ProcessEvent(ev);
 		return State::Flag::None;
 	}
 	std::shared_ptr<State> GetState()
@@ -87,8 +93,7 @@ public:
 	sf::Sprite             _test;
 	sf::View               _view;
 	std::shared_ptr<State> _stateInQuestion;
-	uint64_t lFrames = 0;
-	std::string lfDt;
+	std::ostringstream     _oss;
 };
 
 int main()

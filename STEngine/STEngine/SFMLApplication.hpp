@@ -57,7 +57,7 @@ private:
 	/**Update the internal logic of the application.*/
 	bool UpdateLogic();
 	/** Handle input is for handling system related input.  Keyboard/Mouse
-	input should be handled by a call to _inputMatrix.ProcessInputIntoMatrix;
+	input should be handled by a call to _inputMatrix.ProcessEvent;
 	\param ev [in] a reference to a polled event.
 	\return true if the event was consumed.
 	*/

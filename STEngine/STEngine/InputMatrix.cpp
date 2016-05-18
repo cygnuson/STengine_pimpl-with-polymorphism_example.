@@ -45,9 +45,77 @@ void InputMatrix::SetReleased(sf::Mouse::Button button)
 	_buttons[button] = false;
 }
 
-bool InputMatrix::ProcessInputIntoMatrix(sf::Event & ev)
+bool InputMatrix::IgnoreBadInput(bool ignore)
 {
-	if (ev.type == sf::Event::KeyPressed
+	return _ignoreBadInput = ignore;
+}
+
+std::string InputMatrix::GetEventName(const sf::Event::EventType& ev)
+{
+	switch (ev)
+	{
+	case sf::Event::Closed:
+		return "Closed";
+	case sf::Event::Resized:
+		return "Resized";
+	case sf::Event::LostFocus:
+		return "LostFocus";
+	case sf::Event::GainedFocus:
+		return "GainedFocus";
+	case sf::Event::TextEntered:
+		return "TextEntered";
+	case sf::Event::KeyPressed:
+		return "KeyPressed";
+	case sf::Event::KeyReleased:
+		return "KeyReleased";
+	case sf::Event::MouseWheelMoved:
+		return "MouseWheelMoved";
+	case sf::Event::MouseButtonPressed:
+		return "MouseButtonPressed";
+	case sf::Event::MouseButtonReleased:
+		return "MouseButtonReleased";
+	case sf::Event::MouseMoved:
+		return "MouseMoved";
+	case sf::Event::MouseEntered:
+		return "MouseEntered";
+	case sf::Event::MouseLeft:
+		return "MouseLeft";
+	case sf::Event::JoystickButtonPressed:
+		return "JoystickButtonPressed";
+	case sf::Event::JoystickButtonReleased:
+		return "JoystickButtonReleased";
+	case sf::Event::JoystickMoved:
+		return "JoystickMoved";
+	case sf::Event::JoystickConnected:
+		return "JoystickConnected";
+	case sf::Event::JoystickDisconnected:
+		return "JoystickDisconnected";
+	}
+}
+
+void InputMatrix::CollectText(std::ostream& ofs)
+{
+	_textStream = &ofs;
+	_collectText = true;
+}
+
+void InputMatrix::StopCollectText()
+{
+	_collectText = false;
+	_textStream = nullptr;
+}
+
+bool InputMatrix::ProcessEvent(sf::Event & ev)
+{
+	if (ev.type == sf::Event::TextEntered && _collectText && _textStream)
+	{
+		*_textStream << (char)ev.text.unicode;
+	}
+	else if (ev.type == sf::Event::TextEntered && !_collectText)
+	{
+		
+	}
+	else if (ev.type == sf::Event::KeyPressed
 		&& ev.key.code != sf::Keyboard::Unknown
 		&& !_keys[ev.key.code])
 	{
@@ -104,7 +172,13 @@ bool InputMatrix::ProcessInputIntoMatrix(sf::Event & ev)
 	else
 	{
 		cg::logger::log_warning("A non-input event made it to the input",
-			" an matrix.");
+			" an matrix. Type is `", GetEventName(ev.type), "`.");
+		if (!_ignoreBadInput)
+		{
+			throw std::runtime_error("A non-input was sent to the input "
+				"solve this by handling all those events BEFORE the input "
+				" matrix is called.");
+		}
 		return false;
 	}
 	return true;
