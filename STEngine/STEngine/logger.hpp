@@ -5,6 +5,7 @@
 
 #include <iostream>
 #include <memory>
+#include <mutex>
 
 #include "stringer.hpp"
 #if defined(STRINGER_HPP)
@@ -31,14 +32,15 @@ public:
 		all = note1 | note2 | note3 | warning | error,
 	};
 private:
-	static uint32_t      sm_current_level;
-	static std::ostream* sm_log_stream;
-	static bool	         sm_is_initialized;
-	const static char    sm_error_label[7];
-	const static char    sm_warning_label[7];
-	const static char    sm_note1_label[7];
-	const static char    sm_note2_label[7];
-	const static char    sm_note3_label[7];
+	static uint32_t      _sm_current_level;
+	static std::ostream* _sm_log_stream;
+	static bool	         _sm_is_initialized;
+	const static char    _sm_error_label[7];
+	const static char    _sm_warning_label[7];
+	const static char    _sm_note1_label[7];
+	const static char    _sm_note2_label[7];
+	const static char    _sm_note3_label[7];
+	static std::mutex    _logMutex;
 
 	static bool sanity_check();
 
@@ -74,12 +76,12 @@ public:
 template<typename T>
 void logger::log_helper(T&& t)
 {
-	*sm_log_stream << cg::stringer::to_string(std::forward<T>(t));
+	*_sm_log_stream << cg::stringer::to_string(std::forward<T>(t));
 }
 template<typename T, typename...Args>
 void logger::log_helper(T&& t, Args&&...args)
 {
-	*sm_log_stream << cg::stringer::to_string(t);
+	*_sm_log_stream << cg::stringer::to_string(t);
 	log_helper(std::forward<Args>(args)...);
 }
 template<typename...Args>
@@ -90,31 +92,32 @@ void logger::log(logger::level level, Args&&...args)
 		/*if the logger is not in a sane state, do nothing.*/
 		return;
 	}
-	if((level & sm_current_level) > 0)
+	std::lock_guard<std::mutex> lock(_logMutex);
+	if((level & _sm_current_level) > 0)
 	{
 		switch(level)
 		{
 		case logger::level::warning:
-			*sm_log_stream << sm_warning_label;
+			*_sm_log_stream << _sm_warning_label;
 			break;
 		case logger::level::error:
-			*sm_log_stream << sm_error_label;
+			*_sm_log_stream << _sm_error_label;
 			break;
 		case logger::level::note1:
-			*sm_log_stream << sm_note1_label;
+			*_sm_log_stream << _sm_note1_label;
 			break;
 		case logger::level::note2:
-			*sm_log_stream << sm_note2_label;
+			*_sm_log_stream << _sm_note2_label;
 			break;
 		case logger::level::note3:
-			*sm_log_stream << sm_note3_label;
+			*_sm_log_stream << _sm_note3_label;
 			break;
 		default:
-			*sm_log_stream << "Invalid Level:";
+			*_sm_log_stream << "Invalid Level:";
 			break;
 		}
 		log_helper(std::forward<Args>(args)...);
-		*sm_log_stream << std::endl;
+		*_sm_log_stream << std::endl;
 	}
 }
 

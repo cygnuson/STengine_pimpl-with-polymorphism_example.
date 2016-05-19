@@ -1,29 +1,13 @@
 #include "SFMLApplication.hpp"
 
 
-
-SFMLApplication::SFMLApplication(std::shared_ptr<sf::RenderWindow> target,
-	std::shared_ptr<State> initialState)
-	:
-	_target   (target),
-	_texMan  (TextureManager::GetInstance()),
-	_soundMan(SoundManager::GetInstance()),
-	_fontMan (FontManager::GetInstance())
-{
-	if (!initialState)
-	{
-		cg::logger::log_error("The initial state is invalid.");
-		throw std::runtime_error("The initial state is invalid.");
-	}
-	PushState(initialState);
-}
-
 SFMLApplication::SFMLApplication(const SFMLApplication::Config & config)
 try
 	:
-	_texMan  (TextureManager::GetInstance()),
+	_texMan(TextureManager::GetInstance()),
 	_soundMan(SoundManager::GetInstance()),
-	_fontMan (FontManager::GetInstance())
+	_fontMan(FontManager::GetInstance()),
+	_settings(config)
 {
 	_contextSettings = sf::ContextSettings(
 		config._depthBufferBits,
@@ -32,16 +16,9 @@ try
 		config._majorVersion,
 		config._minorVersion,
 		config._attributes);
-	_target = std::make_shared<sf::RenderWindow>(
-		sf::VideoMode(
-			config._width,
-			config._height,
-			config._bitPerPixel),
-		config._title,
-		config._style,
-		_contextSettings);
-	_target->setKeyRepeatEnabled(config._keyRepeat);
-	PushState(config._initialState);
+	_renderSeperateThread = config._renderSeperateThread;
+	_stack.push(config._initialState);
+	_stack.top()->GetView().setSize(config._width, config._height);
 }
 catch (const std::exception& e) /*Catch an exception the may throw with the
 								initial state not being set.*/
@@ -53,7 +30,16 @@ catch (const std::exception& e) /*Catch an exception the may throw with the
 
 SFMLApplication::~SFMLApplication()
 {
-
+	if (_renderSeperateThread && _renderThread)
+	{
+		cg::logger::log_note(3, "Waiting for the draw loop thread to stop.");
+		_renderThread->wait();
+	}
+	if (_mainLoopThread)
+	{
+		cg::logger::log_note(3, "Waiting for the main loop thread to stop.");
+		_mainLoopThread->wait();
+	}
 }
 
 void SFMLApplication::Start()
@@ -62,6 +48,44 @@ void SFMLApplication::Start()
 	{
 		cg::logger::log_error("Sanity check failed.");
 	}
+	_mainLoopThread = std::make_shared<sf::Thread>
+		(&SFMLApplication::MainLoop, this);
+	_mainLoopThread->launch();
+	while (!_windowCreated)
+	{
+		sf::sleep(sf::microseconds(500));
+	}
+	StartConsole();
+}
+
+void SFMLApplication::MainLoop()
+{
+	_target = std::make_shared<sf::RenderWindow>(
+		sf::VideoMode(
+			_settings._width,
+			_settings._height,
+			_settings._bitPerPixel),
+		_settings._title,
+		_settings._style,
+		_contextSettings);
+	_target->setKeyRepeatEnabled(_settings._keyRepeat);
+	_windowCreated = true;
+	if (_renderSeperateThread)
+	{
+		auto drawMiniLoop = [&]()
+		{
+			_target->setActive(true);
+			while (_target->isOpen())
+			{
+				DrawSection();
+			}
+			cg::logger::log_note(3, "Stopping the drawing miniloop.");
+		};
+		_target->setActive(false);
+		_renderThread = std::make_shared<sf::Thread>(drawMiniLoop);
+		_renderThread->launch();
+	}
+
 	while (_target->isOpen())
 	{
 		sf::Event ev;
@@ -78,17 +102,34 @@ void SFMLApplication::Start()
 			}
 		}
 		UpdateLogic();
-		if (DrawOk())
+		if (!_renderSeperateThread)
 		{
-			_target->clear();
-			Draw();
-			_target->display();
-		}
-		else
-		{
-			cg::logger::log_error("The app is not in a drawable state.");
+			DrawSection();
 		}
 
+	}
+	cg::logger::log_note(3, "Closing the main loop thread.");
+}
+void SFMLApplication::DrawSection()
+{
+	if (DrawOk())
+	{
+		_target->clear();
+		Draw();
+		_target->display();
+	}
+	else
+	{
+		cg::logger::log_error("The app is not in a drawable state.");
+	}
+}
+void SFMLApplication::StartConsole()
+{
+	cg::logger::log_note(3, "Starting the command console.");
+	while (_target->isOpen())
+	{
+		/**just sleep for now.*/
+		sf::sleep(sf::seconds(1));
 	}
 }
 bool SFMLApplication::SanityCheck()
@@ -233,7 +274,7 @@ bool SFMLApplication::WindowOk()
 			, "accessed.");
 		return false;
 	}
-	else 
+	else
 	{
 		return true;
 	}

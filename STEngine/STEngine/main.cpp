@@ -110,12 +110,11 @@ int main()
 	SFMLApplication::Config config;
 	config._title = "Test Title";
 	config._keyRepeat = false;
+	config._renderSeperateThread = true;
 	config._initialState = State::MakeState<TestState>("test");
 	SFMLApplication app(config);
 
 	app.Start();
-
-
 
 	logStream.close();
 }

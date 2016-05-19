@@ -2,6 +2,8 @@
 #define SFMLAPPLICATION_HPP
 
 #include <functional>
+#include <thread>
+#include <mutex>
 
 #include <SFML/Graphics.hpp>
 
@@ -22,6 +24,7 @@ public:
 		sf::Uint16             _height = 600;
 		sf::Uint16             _bitPerPixel = 32;
 		bool		           _keyRepeat = false;
+		bool                   _renderSeperateThread = false;
 		std::string            _title;
 		sf::Uint32             _style = sf::Style::Default;
 		sf::Uint32             _depthBufferBits = 0;
@@ -31,11 +34,11 @@ public:
 		sf::Uint32             _minorVersion = 1;
 		sf::Uint32             _attributes = sf::ContextSettings::Default;
 	};
-	SFMLApplication(std::shared_ptr<sf::RenderWindow> target, 
-		std::shared_ptr<State> initialState);
 	SFMLApplication(const SFMLApplication::Config & config);
-	virtual ~SFMLApplication();	
+	~SFMLApplication();	
 	void Start();
+	/**The command console.*/
+	void StartConsole();
 private:
 	/**Make sure that the app is sane.*/
 	bool SanityCheck();
@@ -64,6 +67,11 @@ private:
 	bool InputEvent(sf::Event& ev);
 	/**Do system draws and then call the top of the stack.*/
 	bool Draw();
+	/**The main loop.*/
+	void MainLoop();
+	/**The drawing specific part of the app loop.*/
+	void DrawSection();
+	
 
 	/**The context settings of this app.*/
 	sf::ContextSettings                 _contextSettings;
@@ -77,6 +85,17 @@ private:
 	FontManager&                        _fontMan;
 	/**The current state.*/
 	std::stack<std::shared_ptr<State> > _stack;
+	/**True to render in a separate thread.*/
+	bool                                _renderSeperateThread;
+	/**The separate rendering thread. will only exist if the option was passed
+	in during construction.*/
+	std::shared_ptr<sf::Thread>         _renderThread;
+	/**the thread that runs the main loop.*/
+	std::shared_ptr<sf::Thread>         _mainLoopThread;
+	/**The stored config settings.*/
+	const Config                        _settings;
+	/**true if the window has been created.*/
+	bool                                _windowCreated;
 };
 
 

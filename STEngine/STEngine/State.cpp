@@ -15,7 +15,7 @@ State::~State()
 
 }
 
-bool State::Draw(sf::RenderWindow & win)
+bool State::Draw(sf::RenderWindow & win) const noexcept
 {
 	return _self->Draw(win);
 }

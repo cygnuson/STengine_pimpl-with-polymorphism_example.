@@ -28,7 +28,7 @@
 *	`State::MakeState<SomeState>(SomeState's args)`. SomeState is not required
 *	to inherit anything. but it MUST have the following functions defined:
 *
-*	     State::StackPair Draw(sf::RenderWindow&, sf::Time)
+*	     State::StackPair Draw(sf::RenderWindow&, sf::Time) 
 *	     bool HandleInput(sf::Event&, sf::Time)
 *	     sf::View& GetView()
 *	     bool SanityCheck()
@@ -49,6 +49,8 @@
 * F: The state implamentor is responsible for timing.  All that is supplied
 *	is the delta-time as a function arg.
 *
+* G:The function GetState() should only allow a state to be accessed ONCE! The
+*	best way to do it is to set it to null after giving someone the state.
 *
 * 
 ******************************************************************************/
@@ -68,7 +70,7 @@ public:
 	/**Draw the state. Calls the _self->Draw(...)
 	\return A pair that holds a flag and a pointer to a state. the ptr to state
 	is only used when the flag requires a new state.*/
-	bool Draw(sf::RenderWindow& win);
+	bool Draw(sf::RenderWindow& win) const noexcept;
 	/**Handle input. Calls _self->HandleInput(...)*/
 	State::Flag HandleInput(sf::Event& ev);
 	/**Get the view of this state (will get from _self)*/
