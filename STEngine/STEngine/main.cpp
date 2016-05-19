@@ -115,6 +115,6 @@ int main()
 	SFMLApplication app(config);
 
 	app.Start();
-
+	app.Wait();
 	logStream.close();
 }

@@ -39,9 +39,13 @@ public:
 	void Start();
 	/**The command console.*/
 	void StartConsole();
+	/**Wait for the window to finish.*/
+	void Wait(sf::Time pause = sf::milliseconds(500));
+	/**Turn the window off.*/
+	void Stop();
 private:
 	/**Make sure that the app is sane.*/
-	bool SanityCheck();
+	inline bool SanityCheck();
 	/**Determine if the state is sane.  Will also pop states that are qued for
 	recycling.*/
 	bool StateOk();
@@ -71,12 +75,14 @@ private:
 	void MainLoop();
 	/**The drawing specific part of the app loop.*/
 	void DrawSection();
+	/**Get the top of the stack. Inline, because its called frequently.*/
+	inline std::shared_ptr<State> TopState();
 	
 
 	/**The context settings of this app.*/
 	sf::ContextSettings                 _contextSettings;
 	/**The actual window of the app.*/
-	std::shared_ptr<sf::RenderWindow>   _target;
+	std::shared_ptr<sf::RenderWindow>   _window;
 	/**The texture manager*/
 	TextureManager&                     _texMan;
 	/**The sound manager*/
@@ -96,8 +102,26 @@ private:
 	const Config                        _settings;
 	/**true if the window has been created.*/
 	bool                                _windowCreated;
+	/**a lock for accessing the mutex.*/
+	std::recursive_mutex                _stackLock;
+	/**a lock for changing the the window.*/
+	std::recursive_mutex                _windowLock;
+	/**a bool for faster determination of weather or not the window is running.
+	*/
+	bool                                _running;
 };
 
+bool SFMLApplication::SanityCheck()
+{
+	return _windowCreated && StateOk() && DrawOk();
+}
+
+inline std::shared_ptr<State> SFMLApplication::TopState()
+{
+	std::lock_guard<std::recursive_mutex> lock(_stackLock);
+	StateOk();
+	return _stack.top();
+}
 
 
 

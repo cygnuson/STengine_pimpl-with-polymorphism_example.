@@ -9,6 +9,7 @@ try
 	_fontMan(FontManager::GetInstance()),
 	_settings(config)
 {
+	/**Create a context for the window. Is saved as a member for reference*/
 	_contextSettings = sf::ContextSettings(
 		config._depthBufferBits,
 		config._stencilBufferBits,
@@ -16,9 +17,12 @@ try
 		config._majorVersion,
 		config._minorVersion,
 		config._attributes);
+	/*Render the window in a seperate thread from the main loop.*/
 	_renderSeperateThread = config._renderSeperateThread;
+	/*Push the initial state to the stack.*/
 	_stack.push(config._initialState);
-	_stack.top()->GetView().setSize(config._width, config._height);
+	/*resize the first view to the windows size.*/
+	TopState()->GetView().setSize(config._width, config._height);
 }
 catch (const std::exception& e) /*Catch an exception the may throw with the
 								initial state not being set.*/
@@ -30,37 +34,28 @@ catch (const std::exception& e) /*Catch an exception the may throw with the
 
 SFMLApplication::~SFMLApplication()
 {
-	if (_renderSeperateThread && _renderThread)
-	{
-		cg::logger::log_note(3, "Waiting for the draw loop thread to stop.");
-		_renderThread->wait();
-	}
-	if (_mainLoopThread)
-	{
-		cg::logger::log_note(3, "Waiting for the main loop thread to stop.");
-		_mainLoopThread->wait();
-	}
+	Stop();
 }
 
 void SFMLApplication::Start()
 {
-	if (!SanityCheck())
-	{
-		cg::logger::log_error("Sanity check failed.");
-	}
+	/*Create the main loop thread.*/
 	_mainLoopThread = std::make_shared<sf::Thread>
 		(&SFMLApplication::MainLoop, this);
 	_mainLoopThread->launch();
+	/*make sure the window is created before starting the console.*/
 	while (!_windowCreated)
 	{
 		sf::sleep(sf::microseconds(500));
 	}
-	StartConsole();
 }
 
 void SFMLApplication::MainLoop()
 {
-	_target = std::make_shared<sf::RenderWindow>(
+	std::lock_guard<std::recursive_mutex> lock(_windowLock);
+	/*The window is created in the thread the main loop is intended to be run
+	inside of.*/
+	_window = std::make_shared<sf::RenderWindow>(
 		sf::VideoMode(
 			_settings._width,
 			_settings._height,
@@ -68,28 +63,38 @@ void SFMLApplication::MainLoop()
 		_settings._title,
 		_settings._style,
 		_contextSettings);
-	_target->setKeyRepeatEnabled(_settings._keyRepeat);
+	/*allow, or disallow the key repeating for the window.*/
+	_window->setKeyRepeatEnabled(_settings._keyRepeat);
 	_windowCreated = true;
+	_running = true;
+	if (!SanityCheck())
+	{
+		cg::logger::log_error("Sanity check failed.");
+	}
 	if (_renderSeperateThread)
 	{
+		/*this mini loop will just call draw over and over again.*/
 		auto drawMiniLoop = [&]()
 		{
-			_target->setActive(true);
-			while (_target->isOpen())
+			_window->setActive(true);
+			while (_running)
 			{
+				/*the small portion of the loop that deal with drawing.*/
 				DrawSection();
 			}
 			cg::logger::log_note(3, "Stopping the drawing miniloop.");
 		};
-		_target->setActive(false);
+		/*The window needs to be made inactive so that it can be activated in
+		the other thread that it supposed to run inside of.*/
+		_window->setActive(false);
 		_renderThread = std::make_shared<sf::Thread>(drawMiniLoop);
 		_renderThread->launch();
 	}
-
-	while (_target->isOpen())
+	/*The actuall event loop for the window.*/
+	while (_running)
 	{
 		sf::Event ev;
-		while (_target->pollEvent(ev))
+		while (_window->pollEvent(ev))
 		{
 			if (InputEvent(ev))
 			{
@@ -101,9 +106,13 @@ void SFMLApplication::MainLoop()
 				/*Other eevnt handling.*/
 			}
 		}
+		/*The logic poriton is sperate so that its FPS can be controlled 
+		seperatly.*/
 		UpdateLogic();
 		if (!_renderSeperateThread)
 		{
+			/*do the small draw section, only if its not running already in 
+			another thread.*/
 			DrawSection();
 		}
 
@@ -112,11 +121,12 @@ void SFMLApplication::MainLoop()
 }
 void SFMLApplication::DrawSection()
 {
+	/*Draw only if the env is sane.*/
 	if (DrawOk())
 	{
-		_target->clear();
+		_window->clear();
 		Draw();
-		_target->display();
+		_window->display();
 	}
 	else
 	{
@@ -126,17 +136,39 @@ void SFMLApplication::DrawSection()
 void SFMLApplication::StartConsole()
 {
 	cg::logger::log_note(3, "Starting the command console.");
-	while (_target->isOpen())
+	while (_window->isOpen())
 	{
 		/**just sleep for now.*/
 		sf::sleep(sf::seconds(1));
 	}
 }
-bool SFMLApplication::SanityCheck()
+void SFMLApplication::Wait(sf::Time pause)
 {
-	return StateOk() && DrawOk();
+	while (_running) 
+	{
+		sf::sleep(pause);
+	}
 }
-
+void SFMLApplication::Stop()
+{
+	std::lock_guard<std::recursive_mutex> lock(_windowLock);
+	_running = false;
+	_window->close();
+	/*wait for the rendering thread to stop.*/
+	if (_renderSeperateThread && _renderThread)
+	{
+		cg::logger::log_note(3, "Waiting for the draw loop thread to stop.");
+		_renderThread->wait();
+	}
+	/*wait for the main loop to stop.*/
+	if (_mainLoopThread)
+	{
+		cg::logger::log_note(3, "Waiting for the main loop thread to stop.");
+		_mainLoopThread->wait();
+	}
+	_window.reset();
+	_windowCreated = false;
+}
 bool SFMLApplication::InputEvent(sf::Event & ev)
 {
 	if (ev.type == sf::Event::KeyPressed
@@ -199,12 +231,13 @@ bool SFMLApplication::InputEvent(sf::Event & ev)
 		/**other event.*/
 	}
 	StateOk();
-	HandleEventFlag(_stack.top()->HandleInput(ev));
+	HandleEventFlag(TopState()->HandleInput(ev));
 	return true;
 }
 bool SFMLApplication::Draw()
 {
-	_stack.top()->Draw(*_target);
+	/*draw the top of the stack.*/
+	TopState()->Draw(*_window);
 	return true;
 }
 
@@ -222,8 +255,10 @@ bool SFMLApplication::DrawOk()
 {
 	bool a = WindowOk();
 	bool b = StateOk();
+	bool c = _windowCreated;
 	return a
-		&& b;
+		&& b
+		&& c;
 }
 
 void SFMLApplication::HandleEventFlag(State::Flag flag)
@@ -232,8 +267,7 @@ void SFMLApplication::HandleEventFlag(State::Flag flag)
 	{
 	case State::Flag::Exit:
 		cg::logger::log_note(3, "Got the exit signal from the state.");
-		_target->close();
-		break;
+		Stop();
 	case State::Flag::Pop:
 		cg::logger::log_note(3, "Got the POP signal from the state.");
 		PopState();
@@ -251,13 +285,16 @@ void SFMLApplication::HandleEventFlag(State::Flag flag)
 
 void SFMLApplication::PushState(std::shared_ptr<State> state)
 {
+	std::lock_guard<std::recursive_mutex> lock(_stackLock);
 	_stack.push(state);
-	auto size = _target->getSize();
+	auto size = _window->getSize();
+	/*set the top states view to be the same size as the window.*/
 	state->GetView().setSize((float)size.x, (float)size.y);
 }
 
 void SFMLApplication::PopState()
 {
+	std::lock_guard<std::recursive_mutex> lock(_stackLock);
 	if (_stack.size() == 1)
 	{
 		cg::logger::log_error("Trying to pop the last state.");
@@ -268,7 +305,7 @@ void SFMLApplication::PopState()
 
 bool SFMLApplication::WindowOk()
 {
-	if (!_target || !_target->isOpen())
+	if (!_window || !_window->isOpen())
 	{
 		cg::logger::log_error("The render window is not setup, but it was "
 			, "accessed.");
@@ -282,6 +319,6 @@ bool SFMLApplication::WindowOk()
 
 bool SFMLApplication::UpdateLogic()
 {
-	_stack.top()->UpdateLogic();
+	TopState()->UpdateLogic();
 	return true;
 }

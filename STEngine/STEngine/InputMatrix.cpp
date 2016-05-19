@@ -99,6 +99,7 @@ std::string InputMatrix::GetEventName(const sf::Event::EventType& ev) noexcept
 	case sf::Event::JoystickDisconnected:
 		return "JoystickDisconnected";
 	}
+	return "Unknown";
 }
 
 void InputMatrix::CollectText(std::ostream& ofs)
