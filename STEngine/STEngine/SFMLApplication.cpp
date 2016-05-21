@@ -291,11 +291,20 @@ void SFMLApplication::PushState(std::shared_ptr<State> state)
 {
 	std::lock_guard<std::recursive_mutex> lock(_stackLock);
 	cg::logger::log_note(2, "Pushing a state to the app.");
-	TopState()->Freeze();
-	_stack.push(state);
-	auto size = _window->getSize();
-	/*set the top states view to be the same size as the window.*/
-	state->GetView().setSize((float)size.x, (float)size.y);
+	if (state)
+	{
+		TopState()->Freeze();
+		_stack.push(state);
+		auto size = _window->getSize();
+		/*set the top states view to be the same size as the window.*/
+		state->GetView().setSize((float)size.x, (float)size.y);
+	}
+	else
+	{
+		cg::logger::log_error("The state expected to be pushed to the stack",
+			" was invalid.");
+		throw std::runtime_error("The state pushed was invalid.");
+	}
 }
 
 void SFMLApplication::PopState()

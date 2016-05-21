@@ -18,10 +18,17 @@ public:
 	/**The settings struct is for making an app with special settings.*/
 	struct Config
 	{
+		/**The initial state of the app. The app will throw an exception if
+		the initial state is invalid or null.*/
 		std::shared_ptr<State> _initialState;
+		/**The width of the window for the app.*/
 		sf::Uint16             _width = 800;
+		/**The height.*/
 		sf::Uint16             _height = 600;
+		/**The color depth*/
 		sf::Uint16             _bitPerPixel = 32;
+		/**The key repeat will allow or prevent the app from unpressing a key
+		after its been pushed and held.*/
 		bool		           _keyRepeat = false;
 		bool                   _renderSeperateThread = false;
 		bool                   _freezeOnMouseLeave = true;

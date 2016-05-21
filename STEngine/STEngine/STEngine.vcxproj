@@ -117,9 +117,11 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="..\LinkLibraries.hpp" />
+    <ClInclude Include="Animation.hpp" />
     <ClInclude Include="FontManager.hpp" />
     <ClInclude Include="InputMatrix.hpp" />
     <ClInclude Include="logger.hpp" />
+    <ClInclude Include="MusicManager.hpp" />
     <ClInclude Include="ResourceManager.hpp" />
     <ClInclude Include="SFINAE.hpp" />
     <ClInclude Include="SFMLApplication.hpp" />
@@ -129,6 +131,7 @@
     <ClInclude Include="TextureManager.hpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Animation.cpp" />
     <ClCompile Include="InputMatrix.cpp" />
     <ClCompile Include="logger.cpp" />
     <ClCompile Include="main.cpp" />

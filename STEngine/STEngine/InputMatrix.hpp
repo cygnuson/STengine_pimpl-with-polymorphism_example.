@@ -23,17 +23,17 @@ public:
 	static std::string GetKeyName(sf::Keyboard::Key key)noexcept;
 	/**Key names for Mouse buttons.*/
 	static std::string GetKeyName(sf::Mouse::Button b)noexcept;
-	/*This is a singleton. Get the single instance.*/
+	/**Process the sfml event into the matrix.*/
 	bool ProcessEvent(sf::Event& ev);
-	/*Clear all key states and mosue states.*/
+	/**Clear all key states and mosue states.*/
 	void ClearAll();
-	/*return true if the key is down. Unpress = true will force release the 
+	/**return true if the key is down. Unpress = true will force release the 
 	key.*/
 	bool IsPressed(sf::Keyboard::Key key, bool unpress);
 	bool IsPressed(sf::Keyboard::Key key) const;
-	/*Set a key as beign pressed.*/
+	/**Set a key as beign pressed.*/
 	void SetPressed(sf::Keyboard::Key key);
-	/*Set a key as being released.*/
+	/**Set a key as being released.*/
 	void SetReleased(sf::Keyboard::Key key);
 	/**mouse overloads.*/
 	bool IsPressed(sf::Mouse::Button button, bool unpress);

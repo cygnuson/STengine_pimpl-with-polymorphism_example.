@@ -54,6 +54,9 @@
 * G:The function GetState() should only allow a state to be accessed ONCE! The
 *	best way to do it is to set it to null after giving someone the state.
 *
+* H:The Freeze() and Unfreeze() functions are executed when the state 
+*	changes(freeze), and changes back(unfreeze).
+*
 * 
 ******************************************************************************/
 
