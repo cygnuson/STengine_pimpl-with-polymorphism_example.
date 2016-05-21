@@ -30,13 +30,19 @@ public:
 		/**The key repeat will allow or prevent the app from unpressing a key
 		after its been pushed and held.*/
 		bool		           _keyRepeat = false;
+		/**If true, the rendering will be done in its own thread, while the
+		main loop will run in its own thread as well.  Otherwise, the rendering
+		will be done in the main loop (still in its own thread).  The window 
+		will be deactivate and reactivated in the seperate rendering thread.*/
 		bool                   _renderSeperateThread = false;
-		bool                   _freezeOnMouseLeave = true;
-		bool                   _unfreezeOnMouseEnter = true;
+		/**The path of the default font file to be loaded in the font manager
+		under `default`.*/
 		std::string            _defaultFontPath = "fonts/Mechanical.otf";
-		sf::Keyboard::Key      _unfreezeKey = sf::Keyboard::Escape;
+		/**The title of the window.*/
 		std::string            _title;
+		/**The initial style of the window.*/
 		sf::Uint32             _style = sf::Style::Default;
+		/**The sf::ContextSettings attributes.*/
 		sf::Uint32             _depthBufferBits = 0;
 		sf::Uint32             _stencilBufferBits = 0;
 		sf::Uint32             _antiAliasing = 0;
@@ -44,34 +50,46 @@ public:
 		sf::Uint32             _minorVersion = 1;
 		sf::Uint32             _attributes = sf::ContextSettings::Default;
 	};
+	/**Create the applciation. It requires a config.*/
 	SFMLApplication(const SFMLApplication::Config & config);
 	~SFMLApplication();	
+	/*Start the main loop in its own thread. Must call somthing blocking
+	afterward or the app will exit right away.*/
 	void Start();
-	/**The command console.*/
+	/**The command console, for debugging or as part of the app.*/
 	void StartConsole();
-	/**Wait for the window to finish.*/
+	/**Wait for the window to finish.
+	\param pause [in] the amount of time in between checks on the window.*/
 	void Wait(sf::Time pause = sf::milliseconds(500));
 	/**Turn the window off.*/
 	void Stop();
 protected:
-	/**Make sure that the app is sane.*/
+	/**Make sure that the app is sane.
+	\return true if the app is in a sane state.*/
 	inline bool SanityCheck();
 	/**Determine if the state is sane.  Will also pop states that are qued for
-	recycling.*/
+	recycling.
+	\return true if the state at the top of the stack is ok to use.*/
 	bool StateOk();
-	/**Determine if the system is in a state that is drawable.*/
+	/**Determine if the system is in a state that is drawable.
+	\return true if the app can execute draw functions.*/
 	bool DrawOk();
-	/**Determine what to do with the stack pair that the state returned.*/
-	void HandleEventFlag(State::Flag pair);
+	/**Determine what to do with the stack pair that the state returned.
+	\param flag the flag to handle.
+	\sa State::Flag*/
+	void HandleEventFlag(State::Flag flag);
 	/**Pop a state of fthe stack. All current input will bedumped to the 
-	current states que.*/
+	current states que.
+	\param state The state to push to the top of the state stack.*/
 	void PushState(std::shared_ptr<State> state);
 	/**Push a state to the stack. All current input will bedumped to the 
 	current states que.*/
 	void PopState();
-	/**Get the target, while also making sure its set properly.*/
+	/**Get the target, while also making sure its set properly.
+	\return true if the window is in a usable state.*/
 	bool WindowOk();
-	/**Update the internal logic of the application.*/
+	/**Update the internal logic of the application.
+	\return true if some logic was updated.*/
 	bool UpdateLogic();
 	/** Handle input is for handling system related input.  Keyboard/Mouse
 	input should be handled by a call to _inputMatrix.ProcessEvent;
@@ -79,13 +97,17 @@ protected:
 	\return true if the event was consumed.
 	*/
 	bool InputEvent(sf::Event& ev);
-	/**Do system draws and then call the top of the stack.*/
+	/**Do system draws and then call the top of the stack.
+	\return true if somthing was drawn.*/
 	bool Draw();
-	/**The main loop.*/
+	/**The main loop. Will always run in its own thread.*/
 	void MainLoop();
-	/**The drawing specific part of the app loop.*/
+	/**The drawing specific part of the app loop. The small section of the main
+	loop that does drawing. Its seperate so that it can have the option of
+	beign executed in its own thread.*/
 	void DrawSection();
-	/**Get the top of the stack. Inline, because its called frequently.*/
+	/**Get the top of the stack. Inline, because its called frequently.
+	\return the state on the top of the stack.*/
 	inline std::shared_ptr<State> TopState();
 	
 

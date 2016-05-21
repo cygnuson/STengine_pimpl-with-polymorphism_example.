@@ -47,7 +47,7 @@ to_string(const std::string& str)
 }
 
 
-/*******************************************containers with only two elements.*/
+/******************************************containers with only two elements.*/
 template<
 	template<typename, typename> class Pair,
 	typename A,
@@ -59,7 +59,7 @@ std::string to_string(const Pair<A,B>& p)
 	ss << "(" << p.first << "," << p.second << ")";
 	return ss.str();
 }
-/****************************************************Container with allocator.*/
+/***************************************************Container with allocator.*/
 
 template<
 	typename Type,
@@ -75,7 +75,7 @@ std::string to_string(const List<Type,Alloc<Type>>& o)
 	}
 	return ss.str();
 }
-/********************************************Containers with alloc and compare*/
+/*******************************************Containers with alloc and compare*/
 
 template<
 	template<typename,typename,typename> class List,
@@ -92,7 +92,7 @@ std::string to_string(const List<Type,Comp<Type>,Alloc<Type>>& o)
 	}
 	return ss.str();
 }
-/*************************************************************************Maps*/
+/************************************************************************Maps*/
 template<
 	template<typename,typename,typename,typename> class Map,
 	typename Key,
@@ -111,7 +111,7 @@ std::string to_string(
 	}
 	return ss.str();
 }
-/*************************************************Unordered sets and multisets*/
+/************************************************Unordered sets and multisets*/
 template<
 	template<typename,typename,typename,typename> class USet,
 	typename Key,
@@ -128,7 +128,7 @@ std::string to_string(const USet<Key,Hasher<Key>,Pred<Key>,Alloc<Key>>& o)
 	}
 	return ss.str();
 }
-/****************************************************************Unordered Map*/
+/***************************************************************Unordered Map*/
 template<
 	template<typename,typename,typename,typename,typename> class Map,
 	typename Key,
@@ -149,7 +149,7 @@ std::string to_string(
 	return ss.str();
 
 }
-/***************************************************************For std::array*/
+/**************************************************************For std::array*/
 template<
 	template<typename,std::size_t> class Array,
 	typename Type,
@@ -164,7 +164,7 @@ std::string to_string(const Array<Type,Size>& o)
 	}
 	return ss.str();
 }
-/******************************************************For std::shared_pointer*/
+/*****************************************************For std::shared_pointer*/
 template<template<typename> class Ptr,typename T>
 std::string to_string(const Ptr<T>& o)
 {

@@ -73,25 +73,32 @@ public:
 	State();
 	virtual ~State();
 	/**Draw the state. Calls the _self->Draw(...)
-	\return A pair that holds a flag and a pointer to a state. the ptr to state
-	is only used when the flag requires a new state.*/
+	\param win The sf::RenderWinder reference that will be srawn to.
+	\return true if drawing was done.*/
 	bool Draw(sf::RenderWindow& win) const noexcept;
-	/**Handle input. Calls _self->HandleInput(...)*/
+	/**Handle input. Calls _self->HandleInput(...)
+	\param ev [in] the event to process.
+	\return a flag the may indicate various things.
+	\sa SFMLApplication::HandleEventFlag*/
 	State::Flag HandleInput(sf::Event& ev);
-	/**Get the view of this state (will get from _self)*/
+	/**Get the view of this state (will get from _self)
+	\return a reference to the active sf::View.*/
 	sf::View& GetView();
-	/**Make sure the stat is sane.*/
+	/**Make sure the stat is sane.
+	\return true if the state is sane.*/
 	bool SanityCheck();
-	/**Update the state logics.*/
+	/**Update the state logics.
+	\return true if some logic was updated.*/
 	bool UpdateLogic();
 	/**Get the new state. This is how the app gets the new states when a state
 	needs to create another, and sends the Flag::Push as a return of 
-	handleinput().*/
+	handleinput().
+	\return the the new state to be used.*/
 	std::shared_ptr<State> GetState();
 	/**Called when the state is frozen.*/
-	virtual void Freeze();
+	void Freeze();
 	/**Called when the state is unfrozen.*/
-	virtual void Unfreeze();
+	void Unfreeze();
 	/**Create a state for use with an app.
 	T must have:
 	State::StackPair Draw(sf::RenderWindow&,sf::time)
@@ -104,6 +111,11 @@ public:
 	void Unfreeze();
 
 	T will be initialized with Args...
+	\tparam T the state to use.
+	\tparam Args the args to construct the state with.
+	\param args the args to construct the state with.
+	\return the new state as a State wrapped around the Model that was
+	constructed with the T tparam.
 	*/
 	template<typename T, typename...Args>
 	static std::shared_ptr<State> MakeState(Args...args);
@@ -134,7 +146,9 @@ protected:
 	};
 
 	/**The actual impl that will inherit from the class that is created with 
-	State::MakeState<SomeClass>(SomeClass's args...).*/
+	State::MakeState<SomeClass>(SomeClass's args...).  The implementation part
+	of the state holds its own clocks for time deltas for logic, grapgics, and 
+	input.*/
 	template<typename T>
 	class StateImpl : public StateBase, public T
 	{

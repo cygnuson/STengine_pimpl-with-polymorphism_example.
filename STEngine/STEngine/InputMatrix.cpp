@@ -16,6 +16,7 @@ bool InputMatrix::IsPressed(sf::Keyboard::Key key, bool unpress)
 {
 	bool retValue = _keys[key];
 	if (retValue && unpress) {
+		/*cause to key to release.*/
 		SetReleased(key);
 	}
 	return retValue;
@@ -28,6 +29,7 @@ bool InputMatrix::IsPressed(sf::Mouse::Button button, bool unpress)
 {
 	bool retValue = _buttons[button];
 	if (retValue && unpress) {
+		/*release the key.*/
 		SetReleased(button);
 	}
 	return retValue;
