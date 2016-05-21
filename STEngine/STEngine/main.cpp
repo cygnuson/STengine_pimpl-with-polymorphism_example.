@@ -21,7 +21,7 @@ class TestState : public InputMatrix
 public:
 	TestState(const std::string& tex)
 	{
-		_test = sf::Sprite(TextureManager::GetInstance()[tex]);
+		_test = Animation("testanim", { 32,32 });
 		_view.move(-300, -300);
 		IgnoreBadInput(true);
 	}
@@ -40,7 +40,7 @@ public:
 	bool Draw(sf::RenderWindow& win, sf::Time dt)
 	{
 		win.setView(_view);
-		win.draw(_test);
+		_test.Draw(win);
 		return true;
 	}
 	bool SanityCheck() {
@@ -100,7 +100,6 @@ int main()
 	config._title = "Test Title";
 	config._keyRepeat = false;
 	config._renderSeperateThread = true;
-	config._freezeOnMouseLeave = false;
 	config._initialState = State::MakeState<TestState>("test");
 	SFMLApplication app(config);
 
