@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html>
+<head>
+<link rel="stylesheet" href="http://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.4.0/styles/monokai-sublime.min.css">
+<link rel="stylesheet" type="text/css" href="styles.css">
+<script src="http://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.4.0/highlight.min.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+</head>
+<body>
+<div>
+
+The first thing to do is setup a log for the system to send messages to.
+</div>
+<pre><code clas="cpp">
+
+int main()
+{
+	std::ofstream logStream("log.txt");
+	cg::logger::init(cg::logger::all & ~cg::logger::note1, logStream);
+</code>
+</pre>
+<div>
+State::MakeState<T>(args...), part of the State class, will setup a new std::shared_ptr<State>
+in a way that the app expects. The implementation of State is private, and polymorphic,
+so that changes to the state wont require a total recompile.
+
+The system uses four singleton classes, FontManager, TextureManager, SoundManager,
+and MusicManager to manage loadable resources. Resources that have the same filepath
+are considered the same resource and are just referenced by the manager and not loaded
+a second time.
+</div>
+<pre>
+<code class="cpp">
+	/*Load the textrues in the texture manager. 
+	other manager work in the same way.*/
+	TextureManager::GetInstance().MakeTexture("test", "tex/test.jpg");
+	TextureManager::GetInstance().MakeTexture("test2", "tex/test2.jpg");
+	SFMLApplication::Config config;
+	config._title = "Test Title";
+	config._renderSeperateThread = true;
+	/*Will create a state, with all the args 
+	sent to the TestState constructor.*/
+	config._initialState = State::MakeState<TestState>("test2");
+	SFMLApplication app(config);
+</code>
+</pre>
+<div>
+Dont forget to close the log stream. 
+cg::logger::init(cg::logger::all & ~cg::logger::note1, std::cout) will also work
+if you want to see all the logs on the stdout.  the app will always run in its
+own thread. The use of app.Wait or app.StartConsole() will block the program from
+closing in on itself.
+</div>
+<pre>
+<code class="cpp">
+	app.Start();
+	app.Wait(); //optionally: app.StartConsole();
+	logStream.close();
+}
+</code>
+</pre>
+<div>
+Here is a generic example of a state to be made with 
+the makestate function.
+</div>
+<pre>
+<code class="cpp">
+
+class TestState : public InputMatrix 
+/*Inherit from the InpuMatrix to give you access to many 
+cool features for reading user input.*/
+{
+public:
+	TestState(const std::string& tex)
+	{
+		_test = Animation("testanim", { 32,32 });
+		_view.move(-300, -300);
+		IgnoreBadInput(true);
+	}
+	virtual ~TestState()
+	{
+
+	}
+	/**All states must have the Freeze() functon.  
+	Its run when the state is frozen. all states 
+	that are not the state top of the stack get frozen,
+	and then unfrozen
+	when the state is on top again.*/
+	void Freeze()
+	{
+		InputMatrix::ClearAll();
+	}
+	void Unfreeze()
+	{
+
+	}
+	/*All states must have the draw function. It is 
+	called each time the drawing loopis executed.  
+	dt is the amount of time that has passed sense 
+	the last call.*/
+	bool Draw(sf::RenderWindow& win, sf::Time dt)
+	{
+		win.setView(_view);
+		_test.Draw(win);
+		return true;
+	}
+	/*each state requires SanityCheck, which should 
+	return true if the state is
+	in a usable state.*/
+	bool SanityCheck() {
+		return true;
+	}
+	/*All states must have the UpdateLogic function. It is 
+	called every time the main loop is executed.  dt is the
+	amount of time that has passed sense the last call.*/
+	bool UpdateLogic(sf::Time dt)
+	{
+		if (IsPressed(sf::Keyboard::Left))
+		{
+			_test.Move({ 100 * dt.asSeconds(), 100 * dt.asSeconds() });
+		}
+		return true;
+	}
+	void Resize(sf::Event& ev)
+	{
+		_view.setSize(float(ev.size.width), float(ev.size.height));
+	}
+	/*All state must have HandleInput.  dt is the time sense
+	the last call toHandleInput.  It returns a State::Flag 
+	(see in docs).*/
+	State::Flag HandleInput(sf::Event& ev, sf::Time dt)
+	{
+		if (ev.type == sf::Event::Closed)
+		{
+			/*Will cause the window to close and the app to exit.*/
+			return State::Flag::Exit;
+		}
+		if (ev.type == sf::Event::Resized)
+		{
+			Resize(ev);
+			return State::Flag::None;
+		}
+		/*The process event is from the input matrix, and 
+		make it easier to deal with input.*/
+		ProcessEvent(ev);
+		return State::Flag::None;
+	}
+	/*All states require the GetState function. It only
+	returns a single stateand isued for sending new sates
+	to the stack. See the next example.*/
+	std::shared_ptr<State> GetState()
+	{
+		return _stateInQuestion;
+	}
+	/*All states require the GetView function, that gives 
+	the current view tothe app.*/
+	sf::View& GetView()
+	{
+		return _view;
+	}
+	Animation              _test;
+	sf::View               _view;
+	std::shared_ptr<State> _stateInQuestion;
+};
+</code>
+</pre>
+<div>
+Another example for creating new states.  The state that creates 
+another state will freeze and then unfreeze when the new state is poped.
+</div>
+<pre>
+<code class="cpp">
+State::Flag HandleInput(sf::Event& ev, sf::Time dt)
+	{
+		if (ev.type == sf::Event::Closed)
+		{
+			return State::Flag::Exit;
+		}
+		if (ev.type == sf::Event::Resized)
+		{
+			Resize(ev);
+			return State::Flag::None;
+		}
+		if(ev.type == sf::Event::KeyReleased)
+		{
+			/*Will push a new TestState to the stack.*/
+			_stateInQuestion = State::MakeState<TestState>("test2");
+			return State::Flag::Push;
+		}
+		if(ev.type == sf::Event::MouseButtonReleased)
+		{
+			/*Will pop this state.*/
+			return State::Flag::Pop;
+		}
+		ProcessEvent(ev);
+		return State::Flag::None;
+	}
+</code>
+</pre>
+<div>
+Look in the doxygen docs and check out all the different cool stuff
+that you can do with the input matrix and states.
+</body>
+</html>
+
+

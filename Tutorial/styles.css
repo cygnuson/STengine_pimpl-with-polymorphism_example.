@@ -1,0 +1,13 @@
+div{
+	width: 80%;
+	text-align: center;
+	margin: 0 auto;
+}
+pre{
+	width: 90%;
+	margin: 0 auto;
+}
+body{
+	background-color: black;
+	color:white;
+}
