@@ -16,9 +16,13 @@ Animation::~Animation()
 
 }
 
-sf::Sprite Animation::GetFrame()
+sf::Sprite& Animation::GetFrame()
 {
-	return sf::Sprite();
+	if(_clock.getElapsedTime() > sf::seconds(float(1)/_fps))
+	{ 
+		return _frames[(++_currentFrame) % _frames.size()];
+	}
+	return _frames[_currentFrame % _frames.size()];
 }
 
 void Animation::Move(sf::Vector2f amt)

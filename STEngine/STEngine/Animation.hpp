@@ -1,6 +1,8 @@
 #ifndef ANIMATION_HPP
 #define ANIMATION_HPP
 
+#include <cstdint>
+
 #include <SFML\System.hpp>
 #include <SFML\Graphics.hpp>
 /**The animation class is a simple animation that will play all frames given
@@ -22,12 +24,12 @@ public:
 	void Move(sf::Vector2f amt);
 	virtual void Draw(sf::RenderWindow& win);
 protected:
-	sf::Sprite GetFrame();
+	sf::Sprite& GetFrame();
 
 	sf::Clock               _clock;
 	float                   _fps;
 	std::vector<sf::Sprite> _frames;
-
+	uint32_t                _currentFrame;
 	
 };
 
