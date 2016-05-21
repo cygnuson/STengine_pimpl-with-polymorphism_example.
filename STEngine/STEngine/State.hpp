@@ -18,22 +18,24 @@
 * B: The State's function `State:Flag HandleInput(sf::Event&,float)` can return
 *	a flag that will ask the app to push a new state to the stack, or pop one.
 *	remember that if the pop signal is returned from HandleInput, the state
-*	returned the flag will be popped.
+*	that returned the flag will be popped.
 * C:When the HandleInput function rturns the `Push` flag, or any flag that
 *	requires a new state, the app will call `std::shared_ptr<State> GetState()`
 *	to get the state that is needed to be pushed. The reason is that the
-*	alternative is returning a pair on ever call (thousands of calls), thats
+*	alternative is returning a pair on every call (thousands of calls), thats
 *	not a good idea as it would hinder performance.
 * D:The ONLY acceptable way to make a state for the system is to call 
 *	`State::MakeState<SomeState>(SomeState's args)`. SomeState is not required
 *	to inherit anything. but it MUST have the following functions defined:
 *
-*	     State::StackPair Draw(sf::RenderWindow&, sf::Time) 
-*	     bool HandleInput(sf::Event&, sf::Time)
+*	     bool Draw(sf::RenderWindow&, sf::Time) 
+*	     State::Flag HandleInput(sf::Event&, sf::Time)
 *	     sf::View& GetView()
 *	     bool SanityCheck()
 *	     bool UpdateLogic(sf::Time)
 *	     std::shared_ptr<State> GetState()
+*        void Freeze();
+*        void Unfreeze();
 *
 *	This list may change, its also at the function comment for 
 *		MakeState<..>(...)
@@ -83,6 +85,10 @@ public:
 	needs to create another, and sends the Flag::Push as a return of 
 	handleinput().*/
 	std::shared_ptr<State> GetState();
+	/**Called when the state is frozen.*/
+	virtual void Freeze();
+	/**Called when the state is unfrozen.*/
+	virtual void Unfreeze();
 	/**Create a state for use with an app.
 	T must have:
 	State::StackPair Draw(sf::RenderWindow&,sf::time)
@@ -91,6 +97,8 @@ public:
 	bool SanityCheck()
 	bool UpdateLogic(sf::Time)
 	std::shared_ptr<State> GetState()
+	void Freeze();
+	void Unfreeze();
 
 	T will be initialized with Args...
 	*/
@@ -109,6 +117,8 @@ protected:
 		virtual bool UpdateLogic() = 0;
 		virtual bool SanityCheck() = 0;
 		virtual std::shared_ptr<State> GetState() = 0;
+		virtual void Freeze() = 0;
+		virtual void Unfreeze() = 0;
 	protected:
 		/**The logic FPS*/
 		double _logicFPS;
@@ -134,7 +144,9 @@ protected:
 		virtual bool UpdateLogic();
 		virtual bool SanityCheck();
 		virtual std::shared_ptr<State> GetState();
-	private:
+		virtual void Freeze();
+		virtual void Unfreeze();
+	protected:
 		/**The main apps drawing clock*/
 		sf::Clock                           _drawClock;
 		/**The main apps logic clock*/
@@ -159,7 +171,7 @@ inline std::shared_ptr<State> State::MakeState(Args ...args)
 {
 	static_assert(CanBeState<T>(), "Class does not have the right functions to"
 		" be a state. Needs Draw, HandleInput, and GetView, SanityCheck, "
-		"UpdateLogic");
+		"UpdateLogic, GetState, Freeze, Unfreeze. See the docs.");
 	auto ptr = std::make_shared<State>();
 	ptr->_self.reset(new State::StateImpl<T>(std::forward<Args>(args)...));
 	return ptr;
@@ -206,6 +218,18 @@ template<typename T>
 inline std::shared_ptr<State> State::StateImpl<T>::GetState()
 {
 	return T::GetState();
+}
+
+template<typename T>
+inline void State::StateImpl<T>::Freeze()
+{
+	T::Freeze();
+}
+
+template<typename T>
+inline void State::StateImpl<T>::Unfreeze()
+{
+	T::Unfreeze();
 }
 
 #endif //STATE_HPP

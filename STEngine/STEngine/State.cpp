@@ -42,3 +42,13 @@ std::shared_ptr<State> State::GetState()
 {
 	return _self->GetState();
 }
+
+void State::Freeze()
+{
+	_self->Freeze();
+}
+
+void State::Unfreeze()
+{
+	_self->Unfreeze();
+}

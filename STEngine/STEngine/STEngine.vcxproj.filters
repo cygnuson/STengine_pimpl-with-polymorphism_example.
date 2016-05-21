@@ -48,9 +48,6 @@
     <ClInclude Include="State.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="KeyName.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="SFINAE.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>

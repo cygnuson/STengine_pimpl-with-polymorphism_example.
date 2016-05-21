@@ -6,7 +6,9 @@ template<typename T, typename = decltype(&T::Draw),
 	typename = decltype(&T::GetView),
 	typename = decltype(&T::UpdateLogic),
 	typename = decltype(&T::SanityCheck),
-	typename = decltype(&T::GetState)
+	typename = decltype(&T::GetState),
+	typename = decltype(&T::Freeze),
+	typename = decltype(&T::Unfreeze)
 >
 static inline std::true_type CanBeStateImpl(int) {};
 

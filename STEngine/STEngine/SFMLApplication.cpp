@@ -23,6 +23,8 @@ try
 	_stack.push(config._initialState);
 	/*resize the first view to the windows size.*/
 	TopState()->GetView().setSize(config._width, config._height);
+	/*set the default font.*/
+	FontManager::GetInstance().MakeFont("default", config._defaultFontPath);
 }
 catch (const std::exception& e) /*Catch an exception the may throw with the
 								initial state not being set.*/
@@ -106,12 +108,12 @@ void SFMLApplication::MainLoop()
 				/*Other eevnt handling.*/
 			}
 		}
-		/*The logic poriton is sperate so that its FPS can be controlled 
+		/*The logic poriton is sperate so that its FPS can be controlled
 		seperatly.*/
 		UpdateLogic();
 		if (!_renderSeperateThread)
 		{
-			/*do the small draw section, only if its not running already in 
+			/*do the small draw section, only if its not running already in
 			another thread.*/
 			DrawSection();
 		}
@@ -144,7 +146,7 @@ void SFMLApplication::StartConsole()
 }
 void SFMLApplication::Wait(sf::Time pause)
 {
-	while (_running) 
+	while (_running)
 	{
 		sf::sleep(pause);
 	}
@@ -174,23 +176,25 @@ bool SFMLApplication::InputEvent(sf::Event & ev)
 	if (ev.type == sf::Event::KeyPressed
 		&& ev.key.code != sf::Keyboard::Unknown)
 	{
-		cg::logger::log_note(2, "Pressed key: ", GetKeyName(ev.key.code));
+		cg::logger::log_note(2, "Pressed key: ",
+			InputMatrix::GetKeyName(ev.key.code));
 	}
 	else if (ev.type == sf::Event::KeyReleased
 		&& ev.key.code != sf::Keyboard::Unknown)
 	{
-		cg::logger::log_note(2, "Released key: ", GetKeyName(ev.key.code));
+		cg::logger::log_note(2, "Released key: ",
+			InputMatrix::GetKeyName(ev.key.code));
 	}
 	else if (ev.type == sf::Event::MouseButtonPressed)
 	{
 		cg::logger::log_note(2, "Pressed button: ",
-			GetKeyName(ev.mouseButton.button), " @ [y,x] : [",
+			InputMatrix::GetKeyName(ev.mouseButton.button), " @ [y,x] : [",
 			ev.mouseButton.y, ",", ev.mouseButton.x, "]");
 	}
 	else if (ev.type == sf::Event::MouseButtonReleased)
 	{
 		cg::logger::log_note(2, "Released button: ",
-			GetKeyName(ev.mouseButton.button), " @ [y,x] : [",
+			InputMatrix::GetKeyName(ev.mouseButton.button), " @ [y,x] : [",
 			ev.mouseButton.y, ",", ev.mouseButton.x, "]");
 	}
 	else if (ev.type == sf::Event::MouseMoved) {
@@ -286,6 +290,8 @@ void SFMLApplication::HandleEventFlag(State::Flag flag)
 void SFMLApplication::PushState(std::shared_ptr<State> state)
 {
 	std::lock_guard<std::recursive_mutex> lock(_stackLock);
+	cg::logger::log_note(2, "Pushing a state to the app.");
+	TopState()->Freeze();
 	_stack.push(state);
 	auto size = _window->getSize();
 	/*set the top states view to be the same size as the window.*/
@@ -295,11 +301,13 @@ void SFMLApplication::PushState(std::shared_ptr<State> state)
 void SFMLApplication::PopState()
 {
 	std::lock_guard<std::recursive_mutex> lock(_stackLock);
+	cg::logger::log_note(2, "Poping a state from the app.");
 	if (_stack.size() == 1)
 	{
 		cg::logger::log_error("Trying to pop the last state.");
 		return;
 	}
+	TopState()->Unfreeze();
 	_stack.pop();
 }
 

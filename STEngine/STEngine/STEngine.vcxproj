@@ -119,7 +119,6 @@
     <ClInclude Include="..\LinkLibraries.hpp" />
     <ClInclude Include="FontManager.hpp" />
     <ClInclude Include="InputMatrix.hpp" />
-    <ClInclude Include="KeyName.hpp" />
     <ClInclude Include="logger.hpp" />
     <ClInclude Include="ResourceManager.hpp" />
     <ClInclude Include="SFINAE.hpp" />

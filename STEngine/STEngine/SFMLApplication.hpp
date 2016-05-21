@@ -10,7 +10,6 @@
 #include "TextureManager.hpp"
 #include "SoundManager.hpp"
 #include "FontManager.hpp"
-#include "KeyName.hpp"
 #include "State.hpp"
 
 class SFMLApplication
@@ -25,6 +24,10 @@ public:
 		sf::Uint16             _bitPerPixel = 32;
 		bool		           _keyRepeat = false;
 		bool                   _renderSeperateThread = false;
+		bool                   _freezeOnMouseLeave = true;
+		bool                   _unfreezeOnMouseEnter = true;
+		std::string            _defaultFontPath = "fonts/Mechanical.otf";
+		sf::Keyboard::Key      _unfreezeKey = sf::Keyboard::Escape;
 		std::string            _title;
 		sf::Uint32             _style = sf::Style::Default;
 		sf::Uint32             _depthBufferBits = 0;
@@ -43,7 +46,7 @@ public:
 	void Wait(sf::Time pause = sf::milliseconds(500));
 	/**Turn the window off.*/
 	void Stop();
-private:
+protected:
 	/**Make sure that the app is sane.*/
 	inline bool SanityCheck();
 	/**Determine if the state is sane.  Will also pop states that are qued for

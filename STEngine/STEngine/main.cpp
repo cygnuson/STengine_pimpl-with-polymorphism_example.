@@ -29,18 +29,26 @@ public:
 	{
 
 	}
+	void Freeze()
+	{
+		InputMatrix::ClearAll();
+	}
+	void Unfreeze()
+	{
+
+	}
 	bool Draw(sf::RenderWindow& win, sf::Time dt)
 	{
 		win.setView(_view);
 		win.draw(_test);
-		static sf::Text txt("", FontManager::GetInstance()["mech"]);;
+		static sf::Text txt("", FontManager::GetInstance()["default"]);;
 		txt.setCharacterSize(30);
 		txt.setPosition(0, 0);
 
 		if (IsPressed(sf::Keyboard::Return,true))
 		{
 			txt = sf::Text(_oss.str(), 
-				FontManager::GetInstance()["mech"]);;
+				FontManager::GetInstance()["default"]);;
 			_oss.str(std::string());
 			//StopCollectText();
 		}
@@ -78,7 +86,10 @@ public:
 			_stateInQuestion = State::MakeState<TestState>("test2");
 			return State::Flag::Push;
 		}
-
+		if (ev.type == sf::Event::KeyReleased)
+		{
+			return State::Flag::Pop;
+		}
 		ProcessEvent(ev);
 		return State::Flag::None;
 	}
@@ -104,13 +115,13 @@ int main()
 	FontManager& fm = FontManager::GetInstance();
 	SoundManager& sm = SoundManager::GetInstance();
 
-	tm.MakeTexture("test", "test.jpg");
-	tm.MakeTexture("test2", "test2.jpg");
-	fm.MakeFont("mech", "fonts/Mechanical.otf");
+	tm.MakeTexture("test", "tex/test.jpg");
+	tm.MakeTexture("test2", "tex/test2.jpg");
 	SFMLApplication::Config config;
 	config._title = "Test Title";
 	config._keyRepeat = false;
 	config._renderSeperateThread = true;
+	config._freezeOnMouseLeave = false;
 	config._initialState = State::MakeState<TestState>("test");
 	SFMLApplication app(config);
 
