@@ -12,17 +12,33 @@
 #include "TextureManager.hpp"
 
 #include "SFMLApplication.hpp"
-#include "Animation.hpp"
+#include "MobileAnimation.hpp"
 
-//TODO: file not found checking for resource manager. (make part of base.)
 
 class TestState : public InputMatrix
 {
 public:
+	enum Direction : uint64_t
+	{
+		Up = 1,
+		Down,
+		Left,
+		Right,
+	};
 	TestState(const std::string& tex)
 	{
-		_test = Animation(tex, { 32,32 }, 2.f, { 1,1 }, { 3,3 });
+		_test.SetDirectionAnimation(Direction::Down,
+			Animation (tex, { 32,32 }, 10.f, { 0,0 }, { 3,1 }));
+		_test.SetDirectionAnimation(Direction::Up,
+			Animation (tex, { 32,32 }, 10.f, { 0,3 }, { 3,1 }));
+		_test.SetDirectionAnimation(Direction::Left,
+			Animation (tex, { 32,32 }, 10.f, { 0,1 }, { 3,1 }));
+		_test.SetDirectionAnimation(Direction::Right,
+			Animation (tex, { 32,32 }, 10.f, { 0,2 }, { 3,1 }));
+		_direction = Direction::Up;
+		_test.SetStillFrameIndex(1);
 		_view.move(-300, -300);
+		_moving = false;
 		IgnoreBadInput(true);
 	}
 	virtual ~TestState()
@@ -40,7 +56,7 @@ public:
 	bool Draw(sf::RenderWindow& win, sf::Time dt)
 	{
 		win.setView(_view);
-		_test.Draw(win);
+		_test.Draw(win,_direction,!_moving);
 		return true;
 	}
 	bool SanityCheck() {
@@ -48,10 +64,49 @@ public:
 	}
 	bool UpdateLogic(sf::Time dt)
 	{
+		if (IsPressed(sf::Keyboard::Up))
+		{
+			if (!IsPressed(sf::Keyboard::Left) 
+				&& !IsPressed(sf::Keyboard::Right))
+			{
+				_direction = Direction::Up;
+			}
+			_test.Move({ 0, -100 * dt.asSeconds() });
+			_moving = true;
+			//_test.Rotate(dt.asSeconds() * 60);
+		}
+		else if (IsPressed(sf::Keyboard::Down))
+		{
+			if (!IsPressed(sf::Keyboard::Left)
+				&& !IsPressed(sf::Keyboard::Right))
+			{
+				_direction = Direction::Down;
+			}
+			_test.Move({0, 100 * dt.asSeconds() });
+			_moving = true;
+			//_test.Rotate(dt.asSeconds() * 60);
+		}
 		if (IsPressed(sf::Keyboard::Left))
 		{
-			_test.Move({ 100 * dt.asSeconds(), 100 * dt.asSeconds() });
-			_test.Rotate(dt.asSeconds() * 60);
+			_direction = Direction::Left;
+			_test.Move({ -100 * dt.asSeconds(), 0});
+			_moving = true;
+			//_test.Rotate(dt.asSeconds() * 60);
+		}
+		else if (IsPressed(sf::Keyboard::Right))
+		{
+			_direction = Direction::Right;
+			_test.Move({ 100 * dt.asSeconds(), 0 });
+			_moving = true;
+			//_test.Rotate(dt.asSeconds() * 60);
+		}
+		if(_moving
+			&& !IsPressed(sf::Keyboard::Right)
+			&& !IsPressed(sf::Keyboard::Left)
+			&& !IsPressed(sf::Keyboard::Down)
+			&& !IsPressed(sf::Keyboard::Right))
+		{
+			_moving = false;
 		}
 		return true;
 	}
@@ -82,9 +137,11 @@ public:
 	{
 		return _view;
 	}
-	Animation              _test;
+	MobileAnimation        _test;
+	Direction              _direction;
 	sf::View               _view;
 	std::shared_ptr<State> _stateInQuestion;
+	bool                   _moving;
 };
 
 int main()
@@ -98,11 +155,12 @@ int main()
 	tm.MakeTexture("test", "tex/test.jpg");
 	tm.MakeTexture("test2", "tex/test2.jpg");
 	tm.MakeTexture("testanim", "tex/test_texture.png");
+	tm.MakeTexture("testship", "tex/ship_texture_trans.png");
 	SFMLApplication::Config config;
 	config._title = "Test Title";
 	config._keyRepeat = false;
 	config._renderSeperateThread = true;
-	config._initialState = State::MakeState<TestState>("testanim");
+	config._initialState = State::MakeState<TestState>("testship");
 	SFMLApplication app(config);
 
 	app.Start();

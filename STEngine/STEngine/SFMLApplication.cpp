@@ -271,6 +271,7 @@ void SFMLApplication::HandleEventFlag(State::Flag flag)
 	{
 	case State::Flag::Exit:
 		cg::logger::log_note(3, "Got the exit signal from the state.");
+		/*set _running to false so that the app can soft-close*/
 		_running = false;
 	case State::Flag::Pop:
 		cg::logger::log_note(3, "Got the POP signal from the state.");

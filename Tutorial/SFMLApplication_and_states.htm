@@ -148,7 +148,7 @@ public:
 	/*All states require the GetState function. It only
 	returns a single stateand isued for sending new sates
 	to the stack. See the next example.*/
-	std::shared_ptr<State> GetState()
+	std::shared_ptr&lt;State&gt; GetState()
 	{
 		return _stateInQuestion;
 	}
@@ -160,7 +160,7 @@ public:
 	}
 	Animation              _test;
 	sf::View               _view;
-	std::shared_ptr<State> _stateInQuestion;
+	std::shared_ptr&lt;State&gt; _stateInQuestion;
 };
 </code>
 </pre>

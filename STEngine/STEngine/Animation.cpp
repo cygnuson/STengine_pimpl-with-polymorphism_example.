@@ -2,7 +2,7 @@
 
 Animation::Animation()
 {
-
+	
 }
 
 Animation::Animation(const std::string & textureName, sf::Vector2u tileSize, 
@@ -58,6 +58,8 @@ Animation::Animation(const std::string & textureName, sf::Vector2u tileSize,
 		currentPosition_t.x = startPosition_t.x;
 		++currentPosition_t.y;
 	}
+	_stillFrameIndex = -1;
+	_currentFrame = 0;
 }
 
 Animation::~Animation()
@@ -65,11 +67,26 @@ Animation::~Animation()
 
 }
 
-sf::Sprite& Animation::GetFrame()
+const sf::Sprite& Animation::GetFrame(bool still)
 {
 	if (_currentFrame >= _frames.size())
 	{
 		_currentFrame = 0;
+	}
+	if (still)
+	{
+		if (_stillFrameIndex == -1)
+		{
+			return _frames[_currentFrame];
+		}
+		else {
+			return _frames[_stillFrameIndex];
+		}
+	}
+	if (_frames.size() == 0)
+	{
+		cg::logger::log_error("Encountered an empty animation object.");
+		throw std::runtime_error("Invalid _frame array.");
 	}
 	if (_clock.getElapsedTime() > sf::seconds(float(1) / _fps))
 	{
@@ -231,5 +248,15 @@ const sf::Transform & Animation::GetTransform() const
 void Animation::Draw(sf::RenderWindow & win)
 {
 	win.draw(GetFrame());
+}
+
+void Animation::SetStillFrame(uint64_t frame)
+{
+	if (frame > _frames.size())
+	{
+		cg::logger::log_error("The still frame index is set out of bounds.");
+		throw std::runtime_error("Invalid frame index.");
+	}
+	_stillFrameIndex = frame;
 }
 

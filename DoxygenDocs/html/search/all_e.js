@@ -6,5 +6,7 @@ var searchData=
   ['resourcemanager_3c_20std_3a_3astring_2c_20sf_3a_3afont_20_3e',['ResourceManager&lt; std::string, sf::Font &gt;',['../class_resource_manager.html',1,'']]],
   ['resourcemanager_3c_20std_3a_3astring_2c_20sf_3a_3amusic_20_3e',['ResourceManager&lt; std::string, sf::Music &gt;',['../class_resource_manager.html',1,'']]],
   ['resourcemanager_3c_20std_3a_3astring_2c_20sf_3a_3asoundbuffer_20_3e',['ResourceManager&lt; std::string, sf::SoundBuffer &gt;',['../class_resource_manager.html',1,'']]],
-  ['resourcemanager_3c_20std_3a_3astring_2c_20sf_3a_3atexture_20_3e',['ResourceManager&lt; std::string, sf::Texture &gt;',['../class_resource_manager.html',1,'']]]
+  ['resourcemanager_3c_20std_3a_3astring_2c_20sf_3a_3atexture_20_3e',['ResourceManager&lt; std::string, sf::Texture &gt;',['../class_resource_manager.html',1,'']]],
+  ['right',['Right',['../class_test_state.html#a5ab3dd5abf72ce3c76888a852bd3da59ad64d2bb704708a8f139d3b120544b72b',1,'TestState']]],
+  ['rotate',['Rotate',['../class_animation.html#ae711751a4b2610d93dc7d1f210d20f60',1,'Animation::Rotate()'],['../class_mobile_animation.html#a8ff14ffbb0db2d812f72b09e8c0bc336',1,'MobileAnimation::Rotate()']]]
 ];

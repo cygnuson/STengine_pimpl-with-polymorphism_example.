@@ -3,6 +3,7 @@ var searchData=
   ['_7eanimation',['~Animation',['../class_animation.html#a401b68793d4fbf48d481c030ee4b2a16',1,'Animation']]],
   ['_7efontmanager',['~FontManager',['../class_font_manager.html#a3a492eef7ed9bb65590092697a7af941',1,'FontManager']]],
   ['_7einputmatrix',['~InputMatrix',['../class_input_matrix.html#acda7847a89794491d11eb93e74f329a2',1,'InputMatrix']]],
+  ['_7emobileanimation',['~MobileAnimation',['../class_mobile_animation.html#a6b590a79722e8a84c8c4304651d0f282',1,'MobileAnimation']]],
   ['_7emusicmanager',['~MusicManager',['../class_music_manager.html#aae2d0b17204e20aed49f343dc1d80be6',1,'MusicManager']]],
   ['_7eresourcemanager',['~ResourceManager',['../class_resource_manager.html#a9409e4df141344cca9bffefa18326c82',1,'ResourceManager']]],
   ['_7esfmlapplication',['~SFMLApplication',['../class_s_f_m_l_application.html#aea9a099a73bbcda1e5eff6cdf3c993ab',1,'SFMLApplication']]],

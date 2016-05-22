@@ -68,15 +68,24 @@ public:
 	const sf::Transform& GetInverseTransform() const;
 	/**\sa sf::Sprite::getTransform*/
 	const sf::Transform& GetTransform() const;
-
+	/**Draw this animation to a window.*/
 	virtual void Draw(sf::RenderWindow& win);
+	/**Set the frame to use for the still image when paused.  Frames are
+	index from left to right top to bottom starting with the first tile and 
+	goign span. See the docs for more info.*/
+	void SetStillFrame(uint64_t frame);
 protected:
-	sf::Sprite& GetFrame();
+	friend class MobileAnimation;
+	/**Get the current frame of the animation.*/
+	const sf::Sprite& GetFrame(bool still = false);
 
 	sf::Clock               _clock;
 	float                   _fps;
 	std::vector<sf::Sprite> _frames;
 	uint32_t                _currentFrame;
+	/**If the still frame index is -1 (default) the still request will be 
+	the current frame.*/
+	int64_t                _stillFrameIndex;
 
 };
 

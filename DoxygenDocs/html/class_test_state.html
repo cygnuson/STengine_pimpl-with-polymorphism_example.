@@ -84,6 +84,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 </div><!-- top -->
 <div class="header">
   <div class="summary">
+<a href="#pub-types">Public Types</a> &#124;
 <a href="#pub-methods">Public Member Functions</a> &#124;
 <a href="#pub-attribs">Public Attributes</a> &#124;
 <a href="class_test_state-members.html">List of all members</a>  </div>
@@ -101,6 +102,15 @@ Inheritance diagram for TestState:</div>
 </map>
  </div></div>
 <table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-types"></a>
+Public Types</h2></td></tr>
+<tr class="memitem:a5ab3dd5abf72ce3c76888a852bd3da59"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_test_state.html#a5ab3dd5abf72ce3c76888a852bd3da59">Direction</a> : uint64_t { <a class="el" href="class_test_state.html#a5ab3dd5abf72ce3c76888a852bd3da59afdf5ff52535c311fd841b6de9be7b65e">Up</a> = 1, 
+<a class="el" href="class_test_state.html#a5ab3dd5abf72ce3c76888a852bd3da59ae41f93674d99c0fa26b8a797f4f65af7">Down</a>, 
+<a class="el" href="class_test_state.html#a5ab3dd5abf72ce3c76888a852bd3da59a85bea304bb2db9d505cc2d900f789ab9">Left</a>, 
+<a class="el" href="class_test_state.html#a5ab3dd5abf72ce3c76888a852bd3da59ad64d2bb704708a8f139d3b120544b72b">Right</a>
+ }</td></tr>
+<tr class="separator:a5ab3dd5abf72ce3c76888a852bd3da59"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
 <tr class="memitem:a0c105443a68ed5b6d5298d34851ef6ca"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_test_state.html#a0c105443a68ed5b6d5298d34851ef6ca">TestState</a> (const std::string &amp;tex)</td></tr>
@@ -159,12 +169,16 @@ Public Member Functions</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-attribs"></a>
 Public Attributes</h2></td></tr>
-<tr class="memitem:a619215cbb39ba43371050489f9da87fb"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_animation.html">Animation</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_test_state.html#a619215cbb39ba43371050489f9da87fb">_test</a></td></tr>
-<tr class="separator:a619215cbb39ba43371050489f9da87fb"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:abbac7f1f8eabcd3f7bf8b77be83e4c75"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_mobile_animation.html">MobileAnimation</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_test_state.html#abbac7f1f8eabcd3f7bf8b77be83e4c75">_test</a></td></tr>
+<tr class="separator:abbac7f1f8eabcd3f7bf8b77be83e4c75"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a50c4cac0de66554fb58c82563413e63b"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_test_state.html#a5ab3dd5abf72ce3c76888a852bd3da59">Direction</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_test_state.html#a50c4cac0de66554fb58c82563413e63b">_direction</a></td></tr>
+<tr class="separator:a50c4cac0de66554fb58c82563413e63b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a74bc5e153022f39521685cac665f2249"><td class="memItemLeft" align="right" valign="top">sf::View&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_test_state.html#a74bc5e153022f39521685cac665f2249">_view</a></td></tr>
 <tr class="separator:a74bc5e153022f39521685cac665f2249"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a71cb7e07cfa36c12f4d74fa5b11968d5"><td class="memItemLeft" align="right" valign="top">std::shared_ptr&lt; <a class="el" href="class_state.html">State</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_test_state.html#a71cb7e07cfa36c12f4d74fa5b11968d5">_stateInQuestion</a></td></tr>
 <tr class="separator:a71cb7e07cfa36c12f4d74fa5b11968d5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a44ed58d25db48b7236e8a43460c01a1a"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_test_state.html#a44ed58d25db48b7236e8a43460c01a1a">_moving</a></td></tr>
+<tr class="separator:a44ed58d25db48b7236e8a43460c01a1a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="inherited"></a>
 Additional Inherited Members</h2></td></tr>
@@ -191,6 +205,29 @@ Additional Inherited Members</h2></td></tr>
 <tr class="memitem:a5883872d8d2bda281316edd1ef301d0e inherit pro_attribs_class_input_matrix"><td class="memItemLeft" align="right" valign="top">std::ostream *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_input_matrix.html#a5883872d8d2bda281316edd1ef301d0e">_textStream</a> = nullptr</td></tr>
 <tr class="separator:a5883872d8d2bda281316edd1ef301d0e inherit pro_attribs_class_input_matrix"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
+<h2 class="groupheader">Member Enumeration Documentation</h2>
+<a class="anchor" id="a5ab3dd5abf72ce3c76888a852bd3da59"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">enum <a class="el" href="class_test_state.html#a5ab3dd5abf72ce3c76888a852bd3da59">TestState::Direction</a> : uint64_t</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<table class="fieldtable">
+<tr><th colspan="2">Enumerator</th></tr><tr><td class="fieldname"><a class="anchor" id="a5ab3dd5abf72ce3c76888a852bd3da59afdf5ff52535c311fd841b6de9be7b65e"></a>Up&#160;</td><td class="fielddoc">
+</td></tr>
+<tr><td class="fieldname"><a class="anchor" id="a5ab3dd5abf72ce3c76888a852bd3da59ae41f93674d99c0fa26b8a797f4f65af7"></a>Down&#160;</td><td class="fielddoc">
+</td></tr>
+<tr><td class="fieldname"><a class="anchor" id="a5ab3dd5abf72ce3c76888a852bd3da59a85bea304bb2db9d505cc2d900f789ab9"></a>Left&#160;</td><td class="fielddoc">
+</td></tr>
+<tr><td class="fieldname"><a class="anchor" id="a5ab3dd5abf72ce3c76888a852bd3da59ad64d2bb704708a8f139d3b120544b72b"></a>Right&#160;</td><td class="fielddoc">
+</td></tr>
+</table>
+
+</div>
+</div>
 <h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a class="anchor" id="a0c105443a68ed5b6d5298d34851ef6ca"></a>
 <div class="memitem">
@@ -472,6 +509,30 @@ Additional Inherited Members</h2></td></tr>
 </div>
 </div>
 <h2 class="groupheader">Member Data Documentation</h2>
+<a class="anchor" id="a50c4cac0de66554fb58c82563413e63b"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_test_state.html#a5ab3dd5abf72ce3c76888a852bd3da59">Direction</a> TestState::_direction</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="a44ed58d25db48b7236e8a43460c01a1a"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool TestState::_moving</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a class="anchor" id="a71cb7e07cfa36c12f4d74fa5b11968d5"></a>
 <div class="memitem">
 <div class="memproto">
@@ -484,12 +545,12 @@ Additional Inherited Members</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="a619215cbb39ba43371050489f9da87fb"></a>
+<a class="anchor" id="abbac7f1f8eabcd3f7bf8b77be83e4c75"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="class_animation.html">Animation</a> TestState::_test</td>
+          <td class="memname"><a class="el" href="class_mobile_animation.html">MobileAnimation</a> TestState::_test</td>
         </tr>
       </table>
 </div><div class="memdoc">

@@ -7,5 +7,6 @@ var searchData=
   ['makesound',['MakeSound',['../class_sound_manager.html#a2f5c824b934ef2e6c261f1a8c70f3bf3',1,'SoundManager']]],
   ['makestate',['MakeState',['../class_state.html#a3e7e1fa58b66ba9d369999781053e879',1,'State']]],
   ['maketexture',['MakeTexture',['../class_texture_manager.html#a977e7cbb23b7f9c2136dcd8e5025d3c6',1,'TextureManager']]],
-  ['move',['Move',['../class_animation.html#ad99397f1f68a77b939cc87e03a862c5d',1,'Animation']]]
+  ['mobileanimation',['MobileAnimation',['../class_mobile_animation.html#af20f8bec016338c54a1a7826f1357f0f',1,'MobileAnimation']]],
+  ['move',['Move',['../class_animation.html#a831d10b83939c311b6c3c05198f6c99d',1,'Animation::Move(float offsetX, float offsetY)'],['../class_animation.html#aba4fd595040cf7a96a379c6fa1b80131',1,'Animation::Move(const sf::Vector2f &amp;offset)'],['../class_mobile_animation.html#a3cda2112b51f734de4b6a208e3c50565',1,'MobileAnimation::Move(float offsetX, float offsetY)'],['../class_mobile_animation.html#a4c873304065398acfcdb3f3f327b7a74',1,'MobileAnimation::Move(const sf::Vector2f &amp;offset)']]]
 ];

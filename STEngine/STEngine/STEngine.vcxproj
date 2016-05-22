@@ -121,6 +121,7 @@
     <ClInclude Include="FontManager.hpp" />
     <ClInclude Include="InputMatrix.hpp" />
     <ClInclude Include="logger.hpp" />
+    <ClInclude Include="MobileAnimation.hpp" />
     <ClInclude Include="MusicManager.hpp" />
     <ClInclude Include="ResourceManager.hpp" />
     <ClInclude Include="SFINAE.hpp" />
@@ -135,6 +136,7 @@
     <ClCompile Include="InputMatrix.cpp" />
     <ClCompile Include="logger.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="MobileAnimation.cpp" />
     <ClCompile Include="SFMLApplication.cpp" />
     <ClCompile Include="State.cpp" />
   </ItemGroup>

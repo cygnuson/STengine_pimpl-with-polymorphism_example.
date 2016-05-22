@@ -87,6 +87,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <a href="#pub-methods">Public Member Functions</a> &#124;
 <a href="#pro-methods">Protected Member Functions</a> &#124;
 <a href="#pro-attribs">Protected Attributes</a> &#124;
+<a href="#friends">Friends</a> &#124;
 <a href="class_animation-members.html">List of all members</a>  </div>
   <div class="headertitle">
 <div class="title">Animation Class Reference</div>  </div>
@@ -99,19 +100,63 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 Public Member Functions</h2></td></tr>
 <tr class="memitem:a83f0a16cef7117f187ad596de38dd9d6"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_animation.html#a83f0a16cef7117f187ad596de38dd9d6">Animation</a> ()</td></tr>
 <tr class="separator:a83f0a16cef7117f187ad596de38dd9d6"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a64dde8a688b152116d50cf8f3aacedb3"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_animation.html#a64dde8a688b152116d50cf8f3aacedb3">Animation</a> (const std::string &amp;textureName, sf::Vector2u tileSize, sf::Vector2u startPosition={0, 0}, sf::Vector2u span={0, 0})</td></tr>
-<tr class="separator:a64dde8a688b152116d50cf8f3aacedb3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5733d80a2fc01939696376a439666677"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_animation.html#a5733d80a2fc01939696376a439666677">Animation</a> (const std::string &amp;textureName, sf::Vector2u tileSize, float fps, sf::Vector2u startPosition={0, 0}, sf::Vector2u span={0, 0})</td></tr>
+<tr class="separator:a5733d80a2fc01939696376a439666677"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a401b68793d4fbf48d481c030ee4b2a16"><td class="memItemLeft" align="right" valign="top">virtual&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_animation.html#a401b68793d4fbf48d481c030ee4b2a16">~Animation</a> ()</td></tr>
 <tr class="separator:a401b68793d4fbf48d481c030ee4b2a16"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ad99397f1f68a77b939cc87e03a862c5d"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_animation.html#ad99397f1f68a77b939cc87e03a862c5d">Move</a> (sf::Vector2f amt)</td></tr>
-<tr class="separator:ad99397f1f68a77b939cc87e03a862c5d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab1ffc3eedcb03035037a86b948304ba6"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_animation.html#ab1ffc3eedcb03035037a86b948304ba6">SetColor</a> (const sf::Color &amp;color)</td></tr>
+<tr class="separator:ab1ffc3eedcb03035037a86b948304ba6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aaf7aff8a7d371a7ac9c8165a68c94b7b"><td class="memItemLeft" align="right" valign="top">const sf::Color &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_animation.html#aaf7aff8a7d371a7ac9c8165a68c94b7b">GetColor</a> () const </td></tr>
+<tr class="separator:aaf7aff8a7d371a7ac9c8165a68c94b7b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad818afac9447e44f94d436ebb80e3c4f"><td class="memItemLeft" align="right" valign="top">sf::FloatRect&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_animation.html#ad818afac9447e44f94d436ebb80e3c4f">GetLocalBounds</a> () const </td></tr>
+<tr class="separator:ad818afac9447e44f94d436ebb80e3c4f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9a5f4b6967702eace3ccd4ca175bb242"><td class="memItemLeft" align="right" valign="top">sf::FloatRect&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_animation.html#a9a5f4b6967702eace3ccd4ca175bb242">GetGlobalBounds</a> () const </td></tr>
+<tr class="separator:a9a5f4b6967702eace3ccd4ca175bb242"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa710f0e8f288a5676d88f917f7f14b41"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_animation.html#aa710f0e8f288a5676d88f917f7f14b41">SetPosition</a> (float x, float y)</td></tr>
+<tr class="separator:aa710f0e8f288a5676d88f917f7f14b41"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa2d94d9424a6c985f6594fd0aa70d9c2"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_animation.html#aa2d94d9424a6c985f6594fd0aa70d9c2">SetPosition</a> (const sf::Vector2f &amp;position)</td></tr>
+<tr class="separator:aa2d94d9424a6c985f6594fd0aa70d9c2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab2025cc2e5e3bbff42d5662dc4a35ec2"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_animation.html#ab2025cc2e5e3bbff42d5662dc4a35ec2">SetRotation</a> (float angle)</td></tr>
+<tr class="separator:ab2025cc2e5e3bbff42d5662dc4a35ec2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a108768a940fa130fcc908157949dd7b0"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_animation.html#a108768a940fa130fcc908157949dd7b0">SetScale</a> (float factorX, float factorY)</td></tr>
+<tr class="separator:a108768a940fa130fcc908157949dd7b0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:adaa117dfb6c2acb846ef2c73519b6b09"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_animation.html#adaa117dfb6c2acb846ef2c73519b6b09">SetScale</a> (const sf::Vector2f &amp;factors)</td></tr>
+<tr class="separator:adaa117dfb6c2acb846ef2c73519b6b09"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:abfa1e1c7722d3dd55fa2de61eb1678b9"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_animation.html#abfa1e1c7722d3dd55fa2de61eb1678b9">SetOrigin</a> (float x, float y)</td></tr>
+<tr class="separator:abfa1e1c7722d3dd55fa2de61eb1678b9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0c9558695f7e93ea95848c3df767eba7"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_animation.html#a0c9558695f7e93ea95848c3df767eba7">SetOrigin</a> (const sf::Vector2f &amp;origin)</td></tr>
+<tr class="separator:a0c9558695f7e93ea95848c3df767eba7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a733d9c119da56575f9925687aa978cae"><td class="memItemLeft" align="right" valign="top">const sf::Vector2f &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_animation.html#a733d9c119da56575f9925687aa978cae">GetPosition</a> () const </td></tr>
+<tr class="separator:a733d9c119da56575f9925687aa978cae"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aced53b6b6e7966818132698c7d3823d8"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_animation.html#aced53b6b6e7966818132698c7d3823d8">GetRotation</a> () const </td></tr>
+<tr class="separator:aced53b6b6e7966818132698c7d3823d8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae5447537d663324dfdfbb1f120fb7f6d"><td class="memItemLeft" align="right" valign="top">const sf::Vector2f &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_animation.html#ae5447537d663324dfdfbb1f120fb7f6d">GetScale</a> () const </td></tr>
+<tr class="separator:ae5447537d663324dfdfbb1f120fb7f6d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:abcff21a29d19ff7c6936f1c528201b8d"><td class="memItemLeft" align="right" valign="top">const sf::Vector2f &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_animation.html#abcff21a29d19ff7c6936f1c528201b8d">GetOrigin</a> () const </td></tr>
+<tr class="separator:abcff21a29d19ff7c6936f1c528201b8d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a831d10b83939c311b6c3c05198f6c99d"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_animation.html#a831d10b83939c311b6c3c05198f6c99d">Move</a> (float offsetX, float offsetY)</td></tr>
+<tr class="separator:a831d10b83939c311b6c3c05198f6c99d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aba4fd595040cf7a96a379c6fa1b80131"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_animation.html#aba4fd595040cf7a96a379c6fa1b80131">Move</a> (const sf::Vector2f &amp;offset)</td></tr>
+<tr class="separator:aba4fd595040cf7a96a379c6fa1b80131"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae711751a4b2610d93dc7d1f210d20f60"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_animation.html#ae711751a4b2610d93dc7d1f210d20f60">Rotate</a> (float angle)</td></tr>
+<tr class="separator:ae711751a4b2610d93dc7d1f210d20f60"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5c72e2ee8c13e3be35c9dcfb2b708caa"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_animation.html#a5c72e2ee8c13e3be35c9dcfb2b708caa">Scale</a> (float factorX, float factorY)</td></tr>
+<tr class="separator:a5c72e2ee8c13e3be35c9dcfb2b708caa"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5dbfc839157a37eb02eb20ee582b2e37"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_animation.html#a5dbfc839157a37eb02eb20ee582b2e37">Scale</a> (const sf::Vector2f &amp;factor)</td></tr>
+<tr class="separator:a5dbfc839157a37eb02eb20ee582b2e37"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa9b8df56294518cdbed112e1d05694f5"><td class="memItemLeft" align="right" valign="top">const sf::Transform &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_animation.html#aa9b8df56294518cdbed112e1d05694f5">GetInverseTransform</a> () const </td></tr>
+<tr class="separator:aa9b8df56294518cdbed112e1d05694f5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a98361badf04dba250c78d855c60797a3"><td class="memItemLeft" align="right" valign="top">const sf::Transform &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_animation.html#a98361badf04dba250c78d855c60797a3">GetTransform</a> () const </td></tr>
+<tr class="separator:a98361badf04dba250c78d855c60797a3"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a9e75e549f23cfea6f03bcb460baf671f"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_animation.html#a9e75e549f23cfea6f03bcb460baf671f">Draw</a> (sf::RenderWindow &amp;win)</td></tr>
 <tr class="separator:a9e75e549f23cfea6f03bcb460baf671f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a53bb2a9c355562d8c2810fe0f8dc2dca"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_animation.html#a53bb2a9c355562d8c2810fe0f8dc2dca">SetStillFrame</a> (uint64_t frame)</td></tr>
+<tr class="separator:a53bb2a9c355562d8c2810fe0f8dc2dca"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pro-methods"></a>
 Protected Member Functions</h2></td></tr>
-<tr class="memitem:a39d69d555bb020b711233ba98f41a341"><td class="memItemLeft" align="right" valign="top">sf::Sprite&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_animation.html#a39d69d555bb020b711233ba98f41a341">GetFrame</a> ()</td></tr>
-<tr class="separator:a39d69d555bb020b711233ba98f41a341"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4391d15f3f144d4b52114bd2b9176fdd"><td class="memItemLeft" align="right" valign="top">const sf::Sprite &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_animation.html#a4391d15f3f144d4b52114bd2b9176fdd">GetFrame</a> (bool still=false)</td></tr>
+<tr class="separator:a4391d15f3f144d4b52114bd2b9176fdd"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pro-attribs"></a>
 Protected Attributes</h2></td></tr>
@@ -121,9 +166,18 @@ Protected Attributes</h2></td></tr>
 <tr class="separator:a1c2af3da75d60fa363c4c3bdf37d5475"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a05d323dd945f37ba02f5ad8134031b5c"><td class="memItemLeft" align="right" valign="top">std::vector&lt; sf::Sprite &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_animation.html#a05d323dd945f37ba02f5ad8134031b5c">_frames</a></td></tr>
 <tr class="separator:a05d323dd945f37ba02f5ad8134031b5c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad543edd3e355a67080a859623319a17e"><td class="memItemLeft" align="right" valign="top">uint32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_animation.html#ad543edd3e355a67080a859623319a17e">_currentFrame</a></td></tr>
+<tr class="separator:ad543edd3e355a67080a859623319a17e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3d244efc35fc733436947ab5eca4cc37"><td class="memItemLeft" align="right" valign="top">int64_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_animation.html#a3d244efc35fc733436947ab5eca4cc37">_stillFrameIndex</a></td></tr>
+<tr class="separator:a3d244efc35fc733436947ab5eca4cc37"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="friends"></a>
+Friends</h2></td></tr>
+<tr class="memitem:ac1d1b2cd3ea4b9c4482b09f40d86c254"><td class="memItemLeft" align="right" valign="top">class&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_animation.html#ac1d1b2cd3ea4b9c4482b09f40d86c254">MobileAnimation</a></td></tr>
+<tr class="separator:ac1d1b2cd3ea4b9c4482b09f40d86c254"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock"><p>The animation class is a simple animation that will play all frames given to it. For an animation that has different directions, see MobileAnimation </p>
+<div class="textblock"><p>The animation class is a simple animation that will play all frames given to it. For an animation that has different directions, see <a class="el" href="class_mobile_animation.html">MobileAnimation</a> </p>
 </div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a class="anchor" id="a83f0a16cef7117f187ad596de38dd9d6"></a>
 <div class="memitem">
@@ -140,7 +194,7 @@ Protected Attributes</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="a64dde8a688b152116d50cf8f3aacedb3"></a>
+<a class="anchor" id="a5733d80a2fc01939696376a439666677"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
@@ -155,6 +209,12 @@ Protected Attributes</h2></td></tr>
           <td></td>
           <td class="paramtype">sf::Vector2u&#160;</td>
           <td class="paramname"><em>tileSize</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">float&#160;</td>
+          <td class="paramname"><em>fps</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
@@ -177,10 +237,10 @@ Protected Attributes</h2></td></tr>
 </div><div class="memdoc">
 <p>Create an animation. </p><dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">textureName</td><td>The name ofthe texture to load. </td></tr>
-    <tr><td class="paramname">tileSize</td><td>The size of each tile. </td></tr>
-    <tr><td class="paramname">startPosition</td><td>the starting tile to use. Default is 0,0 </td></tr>
-    <tr><td class="paramname">span</td><td>the amount of tiles to the right and down to use. by default, the value will be 0,0 and the entire texture will be used. </td></tr>
+    <tr><td class="paramname">textureName</td><td>[in] The name ofthe texture to load. </td></tr>
+    <tr><td class="paramname">tileSize</td><td>[in] The size of each tile. </td></tr>
+    <tr><td class="paramname">startPosition</td><td>[in] the starting tile to use. Default is 0,0 </td></tr>
+    <tr><td class="paramname">span</td><td>the [in] amount of tiles to the right and down to use. by default, the value will be 0,0 and the entire texture will be used. </td></tr>
   </table>
   </dd>
 </dl>
@@ -232,10 +292,27 @@ Protected Attributes</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+<p>Draw this animation to a window. </p>
 
 </div>
 </div>
-<a class="anchor" id="a39d69d555bb020b711233ba98f41a341"></a>
+<a class="anchor" id="aaf7aff8a7d371a7ac9c8165a68c94b7b"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">const sf::Color &amp; Animation::GetColor </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<dl class="section see"><dt>See also</dt><dd>sf::Sprite::getColor </dd></dl>
+
+</div>
+</div>
+<a class="anchor" id="a4391d15f3f144d4b52114bd2b9176fdd"></a>
 <div class="memitem">
 <div class="memproto">
 <table class="mlabels">
@@ -243,9 +320,10 @@ Protected Attributes</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">sf::Sprite Animation::GetFrame </td>
+          <td class="memname">const sf::Sprite &amp; Animation::GetFrame </td>
           <td>(</td>
-          <td class="paramname"></td><td>)</td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>still</em> = <code>false</code></td><td>)</td>
           <td></td>
         </tr>
       </table>
@@ -255,21 +333,443 @@ Protected Attributes</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+<p>Get the current frame of the animation. </p>
 
 </div>
 </div>
-<a class="anchor" id="ad99397f1f68a77b939cc87e03a862c5d"></a>
+<a class="anchor" id="a9a5f4b6967702eace3ccd4ca175bb242"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">sf::FloatRect Animation::GetGlobalBounds </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<dl class="section see"><dt>See also</dt><dd>sf::Sprite::getGlobalBounds </dd></dl>
+
+</div>
+</div>
+<a class="anchor" id="aa9b8df56294518cdbed112e1d05694f5"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">const sf::Transform &amp; Animation::GetInverseTransform </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<dl class="section see"><dt>See also</dt><dd>sf::Sprite::getInverseTransform </dd></dl>
+
+</div>
+</div>
+<a class="anchor" id="ad818afac9447e44f94d436ebb80e3c4f"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">sf::FloatRect Animation::GetLocalBounds </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<dl class="section see"><dt>See also</dt><dd>sf::Sprite::getLocalBounds </dd></dl>
+
+</div>
+</div>
+<a class="anchor" id="abcff21a29d19ff7c6936f1c528201b8d"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">const sf::Vector2f &amp; Animation::GetOrigin </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<dl class="section see"><dt>See also</dt><dd>sf::Sprite::getOrigin </dd></dl>
+
+</div>
+</div>
+<a class="anchor" id="a733d9c119da56575f9925687aa978cae"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">const sf::Vector2f &amp; Animation::GetPosition </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<dl class="section see"><dt>See also</dt><dd>sf::Sprite::getPosition </dd></dl>
+
+</div>
+</div>
+<a class="anchor" id="aced53b6b6e7966818132698c7d3823d8"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">float Animation::GetRotation </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<dl class="section see"><dt>See also</dt><dd>sf::Sprite::getRotation </dd></dl>
+
+</div>
+</div>
+<a class="anchor" id="ae5447537d663324dfdfbb1f120fb7f6d"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">const sf::Vector2f &amp; Animation::GetScale </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<dl class="section see"><dt>See also</dt><dd>sf::Sprite::getScale </dd></dl>
+
+</div>
+</div>
+<a class="anchor" id="a98361badf04dba250c78d855c60797a3"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">const sf::Transform &amp; Animation::GetTransform </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<dl class="section see"><dt>See also</dt><dd>sf::Sprite::getTransform </dd></dl>
+
+</div>
+</div>
+<a class="anchor" id="a831d10b83939c311b6c3c05198f6c99d"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
           <td class="memname">void Animation::Move </td>
           <td>(</td>
-          <td class="paramtype">sf::Vector2f&#160;</td>
-          <td class="paramname"><em>amt</em></td><td>)</td>
+          <td class="paramtype">float&#160;</td>
+          <td class="paramname"><em>offsetX</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">float&#160;</td>
+          <td class="paramname"><em>offsetY</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<dl class="section see"><dt>See also</dt><dd>sf::Sprite::move </dd></dl>
+
+</div>
+</div>
+<a class="anchor" id="aba4fd595040cf7a96a379c6fa1b80131"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Animation::Move </td>
+          <td>(</td>
+          <td class="paramtype">const sf::Vector2f &amp;&#160;</td>
+          <td class="paramname"><em>offset</em></td><td>)</td>
           <td></td>
         </tr>
       </table>
+</div><div class="memdoc">
+<dl class="section see"><dt>See also</dt><dd>sf::Sprite::move </dd></dl>
+
+</div>
+</div>
+<a class="anchor" id="ae711751a4b2610d93dc7d1f210d20f60"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Animation::Rotate </td>
+          <td>(</td>
+          <td class="paramtype">float&#160;</td>
+          <td class="paramname"><em>angle</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<dl class="section see"><dt>See also</dt><dd>sf::Sprite::rotate </dd></dl>
+
+</div>
+</div>
+<a class="anchor" id="a5c72e2ee8c13e3be35c9dcfb2b708caa"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Animation::Scale </td>
+          <td>(</td>
+          <td class="paramtype">float&#160;</td>
+          <td class="paramname"><em>factorX</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">float&#160;</td>
+          <td class="paramname"><em>factorY</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<dl class="section see"><dt>See also</dt><dd>sf::Sprite::scale </dd></dl>
+
+</div>
+</div>
+<a class="anchor" id="a5dbfc839157a37eb02eb20ee582b2e37"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Animation::Scale </td>
+          <td>(</td>
+          <td class="paramtype">const sf::Vector2f &amp;&#160;</td>
+          <td class="paramname"><em>factor</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<dl class="section see"><dt>See also</dt><dd>sf::Sprite::scale </dd></dl>
+
+</div>
+</div>
+<a class="anchor" id="ab1ffc3eedcb03035037a86b948304ba6"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Animation::SetColor </td>
+          <td>(</td>
+          <td class="paramtype">const sf::Color &amp;&#160;</td>
+          <td class="paramname"><em>color</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<dl class="section see"><dt>See also</dt><dd>sf::Sprite::setColor </dd></dl>
+
+</div>
+</div>
+<a class="anchor" id="abfa1e1c7722d3dd55fa2de61eb1678b9"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Animation::SetOrigin </td>
+          <td>(</td>
+          <td class="paramtype">float&#160;</td>
+          <td class="paramname"><em>x</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">float&#160;</td>
+          <td class="paramname"><em>y</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<dl class="section see"><dt>See also</dt><dd>sf::Sprite::setOrigin </dd></dl>
+
+</div>
+</div>
+<a class="anchor" id="a0c9558695f7e93ea95848c3df767eba7"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Animation::SetOrigin </td>
+          <td>(</td>
+          <td class="paramtype">const sf::Vector2f &amp;&#160;</td>
+          <td class="paramname"><em>origin</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<dl class="section see"><dt>See also</dt><dd>sf::Sprite::setOrigin </dd></dl>
+
+</div>
+</div>
+<a class="anchor" id="aa710f0e8f288a5676d88f917f7f14b41"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Animation::SetPosition </td>
+          <td>(</td>
+          <td class="paramtype">float&#160;</td>
+          <td class="paramname"><em>x</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">float&#160;</td>
+          <td class="paramname"><em>y</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<dl class="section see"><dt>See also</dt><dd>sf::Sprite::setPosition </dd></dl>
+
+</div>
+</div>
+<a class="anchor" id="aa2d94d9424a6c985f6594fd0aa70d9c2"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Animation::SetPosition </td>
+          <td>(</td>
+          <td class="paramtype">const sf::Vector2f &amp;&#160;</td>
+          <td class="paramname"><em>position</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<dl class="section see"><dt>See also</dt><dd>sf::Sprite::setPosition </dd></dl>
+
+</div>
+</div>
+<a class="anchor" id="ab2025cc2e5e3bbff42d5662dc4a35ec2"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Animation::SetRotation </td>
+          <td>(</td>
+          <td class="paramtype">float&#160;</td>
+          <td class="paramname"><em>angle</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<dl class="section see"><dt>See also</dt><dd>sf::Sprite::setRotation </dd></dl>
+
+</div>
+</div>
+<a class="anchor" id="a108768a940fa130fcc908157949dd7b0"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Animation::SetScale </td>
+          <td>(</td>
+          <td class="paramtype">float&#160;</td>
+          <td class="paramname"><em>factorX</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">float&#160;</td>
+          <td class="paramname"><em>factorY</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<dl class="section see"><dt>See also</dt><dd>sf::Sprite::setScale </dd></dl>
+
+</div>
+</div>
+<a class="anchor" id="adaa117dfb6c2acb846ef2c73519b6b09"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Animation::SetScale </td>
+          <td>(</td>
+          <td class="paramtype">const sf::Vector2f &amp;&#160;</td>
+          <td class="paramname"><em>factors</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<dl class="section see"><dt>See also</dt><dd>sf::Sprite::setScale </dd></dl>
+
+</div>
+</div>
+<a class="anchor" id="a53bb2a9c355562d8c2810fe0f8dc2dca"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Animation::SetStillFrame </td>
+          <td>(</td>
+          <td class="paramtype">uint64_t&#160;</td>
+          <td class="paramname"><em>frame</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Set the frame to use for the still image when paused. Frames are index from left to right top to bottom starting with the first tile and goign span. See the docs for more info. </p>
+
+</div>
+</div>
+<h2 class="groupheader">Friends And Related Function Documentation</h2>
+<a class="anchor" id="ac1d1b2cd3ea4b9c4482b09f40d86c254"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">friend class <a class="el" href="class_mobile_animation.html">MobileAnimation</a></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">friend</span></span>  </td>
+  </tr>
+</table>
 </div><div class="memdoc">
 
 </div>
@@ -284,6 +784,26 @@ Protected Attributes</h2></td></tr>
       <table class="memname">
         <tr>
           <td class="memname">sf::Clock Animation::_clock</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="ad543edd3e355a67080a859623319a17e"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">uint32_t Animation::_currentFrame</td>
         </tr>
       </table>
   </td>
@@ -332,6 +852,27 @@ Protected Attributes</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="a3d244efc35fc733436947ab5eca4cc37"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">int64_t Animation::_stillFrameIndex</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>If the still frame index is -1 (default) the still request will be the current frame. </p>
 
 </div>
 </div>
