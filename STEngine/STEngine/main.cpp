@@ -21,7 +21,7 @@ class TestState : public InputMatrix
 public:
 	TestState(const std::string& tex)
 	{
-		_test = Animation("testanim", { 32,32 });
+		_test = Animation(tex, { 32,32 }, 2.f, { 1,1 }, { 3,3 });
 		_view.move(-300, -300);
 		IgnoreBadInput(true);
 	}
@@ -51,6 +51,7 @@ public:
 		if (IsPressed(sf::Keyboard::Left))
 		{
 			_test.Move({ 100 * dt.asSeconds(), 100 * dt.asSeconds() });
+			_test.Rotate(dt.asSeconds() * 60);
 		}
 		return true;
 	}
@@ -96,11 +97,12 @@ int main()
 
 	tm.MakeTexture("test", "tex/test.jpg");
 	tm.MakeTexture("test2", "tex/test2.jpg");
+	tm.MakeTexture("testanim", "tex/test_texture.png");
 	SFMLApplication::Config config;
 	config._title = "Test Title";
 	config._keyRepeat = false;
 	config._renderSeperateThread = true;
-	config._initialState = State::MakeState<TestState>("test");
+	config._initialState = State::MakeState<TestState>("testanim");
 	SFMLApplication app(config);
 
 	app.Start();
